@@ -1,0 +1,4 @@
+interface:
+  display_name: "Domain Driven Develop"
+  short_description: "Build domain-driven software from specs through implementation."
+  default_prompt: "Use Domain Driven Develop to model and implement this behavior from source-of-truth docs through code."
