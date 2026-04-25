@@ -26,22 +26,23 @@ Keep these layers separate. This skill defines method and code shape. The projec
 ## First Steps
 
 1. Identify the requested behavior or modeling question.
-2. If the user asks to start a new product/project from a business idea, read `references/project-initialization.md` and enter Init Round.
-3. Otherwise read `references/project-source-of-truth.md` and locate the target repository's domain model, ADRs, behavior specs, API contracts, and test matrices.
-4. Read `references/spec-driven-develop.md` to choose the current round: Init, Discover, Spec, Docs, Testing/Test-First, Code, Sync, Next Behavior Selection, or Post-Implementation Sync.
-5. If the behavior is new, formal, or the project profile adopts feature artifacts, read `references/spec-plan-tasks-artifacts.md`.
-6. If the behavior, language, workflow, or domain ownership is unclear, read `references/event-storming-discovery.md` for Discover Round inputs.
-7. If the user asks what to build next, changes a public surface, asks about release readiness, or the behavior may affect compatibility, read `references/roadmap-and-versioning.md`.
-8. If the change crosses bounded contexts, teams, external systems, published contracts, upstream/downstream relationships, or legacy models, read `references/context-map-and-anticorruption.md`.
-9. If the change may alter boundaries, lifecycle, ownership, canonical language, persistent shape, public contract, or cross-cutting policy, read `references/decisions-and-adrs.md` before local specs or code.
-10. Before non-trivial edits, read `references/round-checklists.md` to create the round todo and coverage checklist.
-11. If the change creates, emits, consumes, projects, publishes, replays, or renames events, read `references/domain-events.md`.
-12. If the change involves commands, queries, read models, projections, event publication, bus boundaries, or read/write consistency, read `references/cqrs-with-ddd.md`.
-13. If tests, acceptance criteria, or behavior coverage are in scope, read `references/testing-traceability.md` and bind changed behavior to stable test ids before Code Round.
-14. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
-15. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
-16. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
-17. For a new TypeScript DDD project or a structural reset, read `references/tactical-typescript-project-structure.md` before creating packages or code. Default to `core -> application -> adapters/apps` and class-based tactical domain objects unless the project source of truth explicitly chooses another architecture.
+2. If this skill is explicitly named by the user, treat the skill body and the relevant references as binding input for the turn. Do not proceed from memory or from the metadata description alone.
+3. If the user asks to start a new product/project from a business idea, read `references/project-initialization.md` and enter Init Round.
+4. Otherwise read `references/project-source-of-truth.md` and locate the target repository's domain model, ADRs, behavior specs, API contracts, and test matrices.
+5. Read `references/spec-driven-develop.md` to choose the current round: Init, Discover, Spec, Docs, Testing/Test-First, Code, Sync, Next Behavior Selection, or Post-Implementation Sync.
+6. If the behavior is new, formal, or the project profile adopts feature artifacts, read `references/spec-plan-tasks-artifacts.md`.
+7. If the behavior, language, workflow, or domain ownership is unclear, read `references/event-storming-discovery.md` for Discover Round inputs.
+8. If the user asks what to build next, changes a public surface, asks about release readiness, or the behavior may affect compatibility, read `references/roadmap-and-versioning.md`.
+9. If the change crosses bounded contexts, teams, external systems, published contracts, upstream/downstream relationships, or legacy models, read `references/context-map-and-anticorruption.md`.
+10. If the change may alter boundaries, lifecycle, ownership, canonical language, persistent shape, public contract, or cross-cutting policy, read `references/decisions-and-adrs.md` before local specs or code.
+11. Before non-trivial edits, read `references/round-checklists.md` to create the round todo and coverage checklist.
+12. If the change creates, emits, consumes, projects, publishes, replays, or renames events, read `references/domain-events.md`.
+13. If the change involves commands, queries, read models, projections, event publication, bus boundaries, or read/write consistency, read `references/cqrs-with-ddd.md`.
+14. If tests, acceptance criteria, or behavior coverage are in scope, read `references/testing-traceability.md` and bind changed behavior to stable test ids before Code Round.
+15. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
+16. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
+17. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
+18. For a new TypeScript DDD project or a structural reset, read `references/tactical-typescript-project-structure.md` before creating packages or code. Default to `core -> application -> adapters/apps` and class-based tactical domain objects unless the project source of truth explicitly chooses another architecture.
 
 ## Reference Map
 
@@ -105,6 +106,7 @@ Load only the files needed for the current task:
 - Do not ship release-sensitive behavior without recording roadmap target, compatibility impact, and public-surface documentation or an explicit not-applicable/deferred reason.
 - Do not start the next round while mandatory checklist items remain unchecked, unless each gap is moved to a documented later round, `not-applicable` state, or `deferred-gap`.
 - Do not bypass source-of-truth specs during Code Round. If the intended behavior is unclear, return to Spec Round.
+- Do not report completion without stating the active round, source-of-truth artifacts changed, verification performed, and deferred gaps.
 
 ## Code Round Trigger
 

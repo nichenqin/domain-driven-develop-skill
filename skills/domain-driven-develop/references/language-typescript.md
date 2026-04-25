@@ -29,6 +29,17 @@ export class OrderId {
 
 Prefer class-based value objects over branded type aliases for domain-significant primitives. A branded alias may be acceptable at transport boundaries, but aggregate/entity state should use value object classes when the value has validation, normalization, comparison, units, ranges, or behavior.
 
+The private `unique symbol` field is intentional. It prevents two structurally identical classes such as `SpeciesId` and `MoveId` from being assignable to each other.
+
+Use this pattern for IDs and scalar value objects:
+
+- private `unique symbol` brand field;
+- private constructor;
+- `create(...)` for validation and normalization;
+- `rehydrate(...)` for trusted persistence reconstruction when needed;
+- `equals(...)` from the value object base or a local implementation;
+- explicit `toJSON()` or `toString()` only when the public representation is stable.
+
 Numeric value objects may contain domain operations:
 
 ```ts
@@ -99,6 +110,8 @@ export interface OrderRepository {
   deleteOne(context: RepositoryContext, spec: OrderSelectionSpec): Promise<Result<boolean, DomainError>>;
 }
 ```
+
+Avoid repository method proliferation such as `findById`, `findByEmail`, `findActiveByOwner`, and `updateStatusById` unless the project has consciously chosen that style. Prefer selection and mutation specifications that adapters translate through visitors.
 
 ## Language Expansion
 

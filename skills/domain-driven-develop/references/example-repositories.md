@@ -14,6 +14,24 @@ Study examples to answer:
 
 Borrow ideas, not architecture by default.
 
+When the user points to a reference repository as the desired style, inspect its package boundaries, dependency direction, and tactical object conventions before scaffolding. Record the adopted parts in an ADR or architecture doc.
+
+## appaloft/appaloft
+
+Repository: https://github.com/appaloft/appaloft
+
+Useful for:
+
+- a TypeScript monorepo style with a central `core` package and separate application/persistence/adapter packages;
+- class-based value objects, entities, aggregates, and result/error helpers;
+- keeping persistence and external adapters outside core;
+- repository ports and specifications near application/core boundaries instead of one package per bounded context.
+
+Caution:
+
+- do not copy Appaloft domain facts or file names blindly;
+- split bounded contexts into packages only when the target project's lifecycle and ADR justify it.
+
 ## VaughnVernon/IDDD_Samples
 
 Repository: https://github.com/VaughnVernon/IDDD_Samples

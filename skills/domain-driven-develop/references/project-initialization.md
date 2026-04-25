@@ -6,6 +6,8 @@ Use this reference when the user asks to initialize a new product/project from a
 
 Init Round creates the source-of-truth foundation for future Spec, Test-First, and Code rounds. It should produce docs and a thin project profile, not production code.
 
+If the user names `domain-driven-develop`, asks for "Init Round", or asks for "Spec Round", treat the round as an explicit workflow requirement. Do not jump directly to implementation.
+
 Use Init Round when:
 
 - the user describes a new business product or domain;
@@ -49,6 +51,21 @@ docs/testing/README.md
 docs/documentation/README.md
 ```
 
+When the product will expose commands, APIs, AI tools, or other public contracts, also create contract-oriented docs during Init Round:
+
+```text
+docs/UBIQUITOUS_LANGUAGE.md
+docs/CONTEXT_MAP.md
+docs/ARCHITECTURE.md
+docs/CLI_CONTRACTS.md
+docs/TOOL_MANIFEST.md
+docs/TESTING_STRATEGY.md or docs/testing/TEST_MATRIX.md
+docs/DATA_VERSIONING.md
+docs/specs/<id>-<slug>/spec.md
+docs/specs/<id>-<slug>/plan.md
+docs/specs/<id>-<slug>/tasks.md
+```
+
 Use existing project paths if they already exist. Do not create duplicate competing docs.
 
 For new TypeScript DDD projects, also read `tactical-typescript-project-structure.md` before creating packages or code. Init Round may create a tactical skeleton, but it should be class-based and structural only:
@@ -60,6 +77,8 @@ For new TypeScript DDD projects, also read `tactical-typescript-project-structur
 - adapter/app placeholders that depend inward.
 
 Do not default to one package per bounded context. Split bounded contexts into packages only when an ADR documents independent lifecycle, ownership, distribution, or build constraints.
+
+Do not implement a behavior command, persistence adapter, simulator, recommender, or formula in Init Round unless the user explicitly narrows the task to that Code Round and the required spec/test artifacts already exist.
 
 If the target directory is not already a Git repository, run `git init` during Init Round unless the user explicitly says not to. This gives future Sync and Code Rounds a reliable change boundary.
 
@@ -76,6 +95,8 @@ The profile should:
 - bind the project's package boundaries, operation catalog, feature artifact directory, and test matrix conventions;
 - require Spec Round before Code Round for new public behavior;
 - avoid copying domain facts from the docs.
+
+The profile may still be detailed about workflow and local paths. "Thin" means it points to source-of-truth documents instead of duplicating business facts; it does not mean vague.
 
 Template:
 

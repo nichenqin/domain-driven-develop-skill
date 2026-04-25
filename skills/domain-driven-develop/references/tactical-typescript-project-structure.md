@@ -2,6 +2,8 @@
 
 Use this reference when initializing or restructuring a TypeScript DDD project, creating the first code skeleton, or reviewing whether package layout and tactical domain objects match the domain model.
 
+This shape is calibrated from DDD-oriented TypeScript repositories that keep domain concepts in a central core package and put application orchestration, persistence, transports, and composition outside it. Appaloft is a useful public example of this style: learn the dependency direction and package separation, not its domain facts.
+
 ## Default Package Shape
 
 Default to this shape unless the project source of truth has an accepted decision for a different architecture:
@@ -25,6 +27,21 @@ packages/
 apps/
   cli/
   api/
+```
+
+For monorepos with persistence adapters, prefer an explicit adapter area:
+
+```text
+packages/
+  core/
+  application/
+  adapters/
+    cli/
+  persistence/
+    sqlite/
+  contracts/
+apps/
+  cli/
 ```
 
 `core` contains tactical domain objects and no framework, database, CLI, HTTP, filesystem, SDK, or DI container dependencies. Bounded contexts are directories inside `core` first, not separate packages by default.
@@ -57,6 +74,8 @@ Use classes for tactical DDD concepts:
 
 Avoid using plain interfaces as the main domain model for concepts with behavior, invariants, identity, lifecycle, or comparison.
 
+Interfaces are still useful for immutable state snapshots, repository ports, visitors, and adapter contracts. They should not replace the class that owns domain behavior.
+
 ## Value Object Rules
 
 Value objects should validate and normalize through factories, expose serialization deliberately, and contain behavior where it belongs.
@@ -69,6 +88,28 @@ Examples:
 - `PokemonType.equals(other): boolean`
 
 Use private constructors plus `create(...)` and `rehydrate(...)` when persistence needs trusted reconstruction.
+
+For TypeScript nominal safety, add a private `unique symbol` brand field to value object and identifier classes when structurally identical classes could otherwise be assigned to each other:
+
+```ts
+const speciesIdBrand: unique symbol = Symbol("SpeciesId");
+
+export class SpeciesId extends ScalarValueObject<string> {
+  private [speciesIdBrand]!: void;
+
+  private constructor(value: string) {
+    super(value);
+  }
+
+  static create(raw: string): Result<SpeciesId, DomainError> {
+    const value = raw.trim();
+    if (!value) return err(domainError.validation("species_id_required"));
+    return ok(new SpeciesId(value));
+  }
+}
+```
+
+Do not use branded type aliases as the primary model for domain-significant values when the value needs validation, normalization, comparison, serialization, or behavior. A class with a private brand gives both behavior and nominal typing.
 
 ## Repository Ports
 
@@ -124,3 +165,15 @@ If Init Round creates code, keep it structural and tactical:
 
 Do not implement production behavior in Init Round. Do not skip these tactical skeletons and replace them with DTO interfaces.
 
+## Init Round Gate
+
+Before creating behavior implementation in a new TypeScript DDD project, verify these are present or explicitly deferred:
+
+- source-of-truth docs folder with domain model, ubiquitous language, context map, decisions, operation catalog, command/query/event/error docs, and test matrix;
+- local project profile skill that points back to `domain-driven-develop` and binds local source-of-truth paths;
+- ADR for package shape when a monorepo or public contract is created;
+- aggregate root/entity/value object classification for the first modeled contexts;
+- repository port shape using `RepositoryContext`, selection specs, mutation specs, and `Result`;
+- specification visitor shape for persistence/read-model translation;
+- stable test ids before Code Round;
+- Git repository initialized unless the user says not to.
