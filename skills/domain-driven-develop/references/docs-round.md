@@ -29,7 +29,10 @@ Check relevant surfaces:
 - error messages and recovery guidance;
 - messages/events surfaced to users;
 - future tool or MCP descriptions;
-- search aliases and locale state when the project has localization.
+- stable help anchors;
+- search aliases;
+- locale state when the project has localization;
+- agent-readable docs or tool descriptions when the project exposes them.
 
 ## Language Rule
 

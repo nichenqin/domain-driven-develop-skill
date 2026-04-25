@@ -6,7 +6,7 @@ Spec-Driven Develop is the workflow-control part of Domain Driven Develop. It tr
 
 Choose exactly one round unless the user explicitly asks for an end-to-end chain. Exception: Code Round should finish with Post-Implementation Sync for the same behavior.
 
-Before any non-trivial edit, read `round-artifacts.md`, create a behavior dossier, classify artifact state, and create a concrete todo with observable exit criteria. Do not edit files while the current round has unknown required artifacts.
+Before any non-trivial edit, read `round-artifacts.md`, create a behavior dossier, classify artifact state, then read `round-checklists.md` and create a concrete todo with observable exit criteria. Do not edit files while the current round has unknown required artifacts or unchecked mandatory todo items.
 
 ### Discover Round
 
@@ -16,7 +16,7 @@ Do this:
 
 - Read the project source-of-truth map.
 - Search operation catalogs, command/query specs, workflow specs, API contracts, and tests for the user's terms.
-- List candidate behaviors with their governing documents.
+- Read `reporting.md` and list candidate behaviors with their governing documents, current behavior/capability state, matching operation or command/query name, rationale, and recommended next round.
 - Stop before editing unless the user chooses a behavior.
 
 ### Spec Round
@@ -43,6 +43,7 @@ Do this:
 - Decide whether the behavior needs a task page, concept page, reference page, troubleshooting page, stable anchor on an existing page, not-user-facing reason, or explicit migration gap.
 - Keep public docs task-oriented and aligned with the ubiquitous language.
 - Record help surfaces for API, CLI, Web, config, messages, and future tools when relevant.
+- Record stable anchors, locale state, search aliases, and agent-readable docs impact when the project has those surfaces.
 
 Do not change business code in Docs Round unless the user explicitly authorizes a chained round.
 
@@ -78,6 +79,7 @@ Do this:
 
 - Implement the smallest coherent behavior slice.
 - Keep entrypoints thin and converge on shared command/query/application semantics.
+- Include the read/query/status path and relevant user-facing entrypoint needed for a minimal observable closed loop, unless explicitly scoped out.
 - Use the bounded context's ubiquitous language in type names, method names, event names, error names, test names, and entrypoint names. If a different transport name is required, translate at the boundary and document the alias.
 - Keep domain decisions in aggregates, value objects, domain services, or application services, not in adapters or repositories.
 - Update tests according to the governing specs.
@@ -111,7 +113,11 @@ Check:
 - entrypoints expose the same semantics;
 - repositories and adapters do not contain business policy;
 - public docs or help anchors are handled when user-visible;
+- write-side changes have read/query/status observability unless explicitly scoped out;
+- expected failing tests from Test-First Round are resolved or still listed as blockers;
 - remaining gaps are explicit and classified.
+
+Read `reporting.md` for formal aligned/not-aligned and ready/not-ready output.
 
 ## Artifact State
 
@@ -171,14 +177,19 @@ Use one state per surface:
 
 Do not call a behavior fully exposed when only one first-class surface supports the new semantics.
 
+Do not call a write-side behavior complete when the only confirmation path is manual persistence inspection. A complete behavior needs an observable query/status/read surface, unless the source of truth explicitly scopes that out.
+
 ## Output Contract
 
 For formal work, report:
 
 - round type;
 - target behavior;
+- behavior/capability state;
 - governing docs;
 - domain owner;
+- artifact state when non-trivial;
+- coverage across relevant surfaces;
 - changed specs/code/tests/entrypoints;
 - verification commands;
 - remaining gaps;
