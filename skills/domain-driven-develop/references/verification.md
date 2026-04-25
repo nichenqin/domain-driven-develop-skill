@@ -10,6 +10,7 @@ Check that:
 - roadmap target and version/compatibility impact are classified when the behavior is user-visible, release-sensitive, or public-contract changing;
 - ADR/decision need was classified, and Code Round has no unresolved required decision records;
 - ubiquitous language has a canonical term map or the equivalent is clear from source-of-truth docs;
+- cross-context relationships, published languages, shared kernels, or anticorruption boundaries are explicit when external systems or other bounded contexts are involved;
 - relevant command/query/API/workflow/error specs exist or are documented as not applicable;
 - command/query split, read model ownership, and consistency expectations are documented when CQRS applies;
 - event producer, payload, publication boundary, consumers, projection effects, and retry/idempotency/replay expectations are documented when events change;
@@ -28,6 +29,7 @@ Check that:
 
 - canonical domain terms are used in aggregate, value object, command, query, event, error, and test names;
 - aggregate boundaries match project source-of-truth docs;
+- external, vendor, legacy, or upstream models are translated at boundaries and do not leak into aggregate state;
 - value objects protect domain-significant values;
 - aggregate methods enforce transitions and invariants;
 - application services orchestrate without hiding domain policy;
@@ -45,6 +47,7 @@ Check that:
 
 - names align across specs, code, tests, docs, and entrypoints;
 - compatibility aliases are documented at boundaries and do not replace the canonical domain term inside the model;
+- published-language terms are mapped to local ubiquitous language rather than silently replacing it;
 - command/query schemas are reused by transports instead of redefined;
 - entrypoints dispatch through shared application semantics rather than duplicating business behavior;
 - read-side DTOs or projections do not leak back into aggregate state as the source of truth;

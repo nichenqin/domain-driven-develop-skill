@@ -44,6 +44,9 @@ Create or refresh this compact dossier before edits:
 - Domain owner:
 - Canonical terms:
 - Compatibility aliases:
+- Upstream/downstream context:
+- Context relationship:
+- Published language or anticorruption boundary:
 - Roadmap target:
 - Version target:
 - Compatibility impact: none | patch | minor | major | pre-1.0-policy | unknown

@@ -12,12 +12,13 @@ Avoid rich DDD for simple CRUD/reporting surfaces that mainly move data around a
 
 1. Identify the bounded context.
 2. Collect ubiquitous language from source-of-truth docs and domain experts.
-3. Decide whether the behavior needs rich domain modeling.
-4. Choose aggregate roots by consistency boundary, not database table or UI page.
-5. Model domain-significant primitives as value objects.
-6. Put invariants and transitions in aggregate methods or value-object state machines.
-7. Put cross-aggregate orchestration in application services.
-8. Keep adapters responsible only for translation and side effects.
+3. Map upstream/downstream relationships when other bounded contexts, teams, external systems, legacy models, or published contracts are involved.
+4. Decide whether the behavior needs rich domain modeling.
+5. Choose aggregate roots by consistency boundary, not database table or UI page.
+6. Model domain-significant primitives as value objects.
+7. Put invariants and transitions in aggregate methods or value-object state machines.
+8. Put cross-aggregate orchestration in application services.
+9. Keep adapters responsible only for translation and side effects.
 
 ## Ubiquitous Language
 
@@ -65,6 +66,7 @@ Do not pass a broad execution context into aggregates just because it is conveni
 A project domain model document should answer:
 
 - What are the bounded contexts?
+- Which upstream/downstream context relationships, published languages, or anticorruption layers matter?
 - Which aggregate roots exist?
 - Which entities and value objects belong inside each aggregate?
 - Which behaviors belong to which aggregate root?
@@ -81,6 +83,7 @@ This skill should not copy those answers. It should read them from the project.
 - A command is named `update` even though the domain intent is specific.
 - Code uses one term, specs use another, and tests use a third for the same concept.
 - Public or transport names quietly replace the bounded context language inside the domain model.
+- A vendor, legacy, or upstream model leaks into aggregate state instead of being translated at an anticorruption boundary.
 - Business state transitions are implemented as string switches in application services.
 - A repository method answers whether a change may happen.
 - A value object is skipped because the primitive type is easy to serialize.

@@ -8,6 +8,7 @@ Search for the target repository's durable instructions and source-of-truth file
 
 - repository rules: `AGENTS.md`, `CONTRIBUTING.md`, `.cursorrules`, `.github/copilot-instructions.md`, or equivalent
 - domain model: `docs/DOMAIN_MODEL.md`, `docs/domain-model.md`, `docs/model/**`, or equivalent
+- context map and integration language: `docs/context-map.md`, `docs/contexts/**`, `docs/integrations/**`, `docs/contracts/**`, or equivalent
 - decisions: `docs/decisions/**`, `adr/**`, `docs/adr/**`
 - roadmap and release/version policy: `docs/PRODUCT_ROADMAP.md`, `ROADMAP.md`, `docs/roadmap/**`, `CHANGELOG.md`, `RELEASE.md`, `docs/release/**`, `docs/versioning/**`, or equivalent
 - behavior specs: `docs/commands/**`, `docs/queries/**`, `docs/workflows/**`, `docs/events/**`, `docs/errors/**`
@@ -37,6 +38,7 @@ Treat current code as evidence, not as automatic truth. If code conflicts with a
 Before writing domain code, answer:
 
 - What bounded context owns this behavior?
+- Does the behavior cross another bounded context, team, legacy system, vendor API, published language, or shared kernel?
 - Which aggregate root owns the state transition?
 - Which value objects represent domain-significant primitives?
 - Which command/query/workflow/event specs govern the behavior?
@@ -56,6 +58,7 @@ Use `domain-driven-develop`.
 
 For this repository:
 - domain model: `docs/DOMAIN_MODEL.md`
+- context map: `docs/context-map.md` or equivalent
 - operation map: `docs/BUSINESS_OPERATION_MAP.md`
 - roadmap/version policy: `docs/PRODUCT_ROADMAP.md`, `CHANGELOG.md`, or equivalent
 - decisions: `docs/decisions/**`

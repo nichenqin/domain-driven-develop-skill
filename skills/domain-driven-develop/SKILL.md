@@ -30,14 +30,15 @@ Keep these layers separate. This skill defines method and code shape. The projec
 3. Otherwise read `references/project-source-of-truth.md` and locate the target repository's domain model, ADRs, behavior specs, API contracts, and test matrices.
 4. Read `references/spec-driven-develop.md` to choose the current round: Init, Discover, Spec, Docs, Testing/Test-First, Code, Sync, Next Behavior Selection, or Post-Implementation Sync.
 5. If the user asks what to build next, changes a public surface, asks about release readiness, or the behavior may affect compatibility, read `references/roadmap-and-versioning.md`.
-6. If the change may alter boundaries, lifecycle, ownership, canonical language, persistent shape, public contract, or cross-cutting policy, read `references/decisions-and-adrs.md` before local specs or code.
-7. Before non-trivial edits, read `references/round-checklists.md` to create the round todo and coverage checklist.
-8. If the change creates, emits, consumes, projects, publishes, replays, or renames events, read `references/domain-events.md`.
-9. If the change involves commands, queries, read models, projections, event publication, bus boundaries, or read/write consistency, read `references/cqrs-with-ddd.md`.
-10. If tests, acceptance criteria, or behavior coverage are in scope, read `references/testing-traceability.md` and bind changed behavior to stable test ids before Code Round.
-11. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
-12. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
-13. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
+6. If the change crosses bounded contexts, teams, external systems, published contracts, upstream/downstream relationships, or legacy models, read `references/context-map-and-anticorruption.md`.
+7. If the change may alter boundaries, lifecycle, ownership, canonical language, persistent shape, public contract, or cross-cutting policy, read `references/decisions-and-adrs.md` before local specs or code.
+8. Before non-trivial edits, read `references/round-checklists.md` to create the round todo and coverage checklist.
+9. If the change creates, emits, consumes, projects, publishes, replays, or renames events, read `references/domain-events.md`.
+10. If the change involves commands, queries, read models, projections, event publication, bus boundaries, or read/write consistency, read `references/cqrs-with-ddd.md`.
+11. If tests, acceptance criteria, or behavior coverage are in scope, read `references/testing-traceability.md` and bind changed behavior to stable test ids before Code Round.
+12. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
+13. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
+14. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
 
 ## Reference Map
 
@@ -58,6 +59,7 @@ Load only the files needed for the current task:
 - `references/cqrs-with-ddd.md`: read when deciding whether CQRS is warranted, separating command/query flows, shaping read models, designing projections, or making consistency/event tradeoffs.
 - `references/domain-modeling.md`: read when discovering bounded contexts, ubiquitous language, ownership, lifecycle, and whether DDD is warranted.
 - `references/context-boundaries.md`: read when bounded context, execution context, domain context, tracing, transactions, or i18n concerns are mixed.
+- `references/context-map-and-anticorruption.md`: read when a behavior crosses bounded contexts, teams, external systems, published languages, upstream/downstream relationships, or legacy models.
 - `references/error-handling.md`: read when modeling expected domain/application failures, error taxonomy, adapter translation, or no-throw Result style.
 - `references/aggregate-root.md`: read when creating or changing aggregate roots, entities, invariants, state transitions, or domain events.
 - `references/value-object.md`: read when modeling IDs, names, statuses, money, addresses, timestamps, ranges, or other domain-significant values.
@@ -79,6 +81,7 @@ Load only the files needed for the current task:
 - Do not place project roadmap targets, release promises, version numbers, or product milestones inside this global skill. Bind them in the target repository or local project profile.
 - Do not classify a change as patch, minor, major, compatible, or breaking until the project's public surface and version policy are known.
 - Use the bounded context's ubiquitous language consistently in docs, code, tests, events, errors, APIs, CLI commands, and UI/help text. Do not introduce synonyms, transport-only names, or legacy aliases without documenting the mapping.
+- Do not let one domain model silently serve multiple bounded contexts. Cross-context collaboration needs an explicit context relationship, published language, translation boundary, or documented shared-kernel choice.
 - Do not put persistence, framework, transport, tracing SDK, queue, filesystem, or provider SDK logic inside aggregates, entities, value objects, or specifications.
 - Do not let repositories answer business-policy questions. Repositories load, persist, and translate specifications; aggregates and application services make business decisions.
 - Do not let query handlers mutate business state or command handlers answer rich read-model questions. Keep read and write responsibilities separate when the project uses CQRS.
@@ -99,12 +102,13 @@ When Code Round touches the domain model, apply these references together:
 1. Project-specific domain facts from the target repository.
 2. `references/roadmap-and-versioning.md` when the change affects roadmap commitments, release readiness, version targets, public surfaces, or compatibility.
 3. `references/domain-modeling.md`
-4. `references/decisions-and-adrs.md` when the change crosses a decision threshold, or to record why no decision record is needed.
-5. `references/domain-events.md` when the change affects domain events, integration events, event handlers, projections, outbox/publication, replay, backfill, or event specs.
-6. `references/cqrs-with-ddd.md` when the change affects command/query boundaries, read models, projections, buses, events, or consistency.
-7. `references/testing-traceability.md` when behavior tests, acceptance criteria, or implementation coverage are in scope.
-8. `references/round-artifacts.md` for dossier and artifact readiness when the change is non-trivial.
-9. The relevant tactical reference, such as aggregate root, value object, repository, specification/visitor, application layer, error handling, context boundaries, or DI/IoC.
-10. `references/verification.md` before final output.
+4. `references/context-map-and-anticorruption.md` when the change crosses contexts, teams, external systems, published languages, or legacy models.
+5. `references/decisions-and-adrs.md` when the change crosses a decision threshold, or to record why no decision record is needed.
+6. `references/domain-events.md` when the change affects domain events, integration events, event handlers, projections, outbox/publication, replay, backfill, or event specs.
+7. `references/cqrs-with-ddd.md` when the change affects command/query boundaries, read models, projections, buses, events, or consistency.
+8. `references/testing-traceability.md` when behavior tests, acceptance criteria, or implementation coverage are in scope.
+9. `references/round-artifacts.md` for dossier and artifact readiness when the change is non-trivial.
+10. The relevant tactical reference, such as aggregate root, value object, repository, specification/visitor, application layer, error handling, context boundaries, or DI/IoC.
+11. `references/verification.md` before final output.
 
 Use examples as patterns, not as project facts.

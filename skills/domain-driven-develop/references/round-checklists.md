@@ -61,6 +61,7 @@ When behavior changes, check and synchronize:
 - behavior map or capability catalog;
 - roadmap, release plan, version policy, changelog, release-note inputs, or migration guide when the project has them;
 - domain model and ubiquitous language;
+- context map, published language, shared kernel, or anticorruption boundary when contexts/systems are crossed;
 - decision records when boundaries change;
 - command/query specs and implementation;
 - workflow/process specs and implementation;
