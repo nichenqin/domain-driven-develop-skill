@@ -65,6 +65,8 @@ skills/domain-driven-develop
 
 - Domain Driven Develop as the entry workflow.
 - Spec-Driven Develop as process control.
+- Feature-level `spec.md`, `plan.md`, and `tasks.md` artifacts for new formal behavior.
+- Event-storming-style discovery for unclear domain flows, commands, events, policies, actors, and aggregate ownership.
 - Domain model source-of-truth binding.
 - Roadmap, release-readiness, version-target, and SemVer compatibility gates.
 - ADR/decision-record gating for durable boundary, lifecycle, ownership, language, persistence, and public-contract choices.

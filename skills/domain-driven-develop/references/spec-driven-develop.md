@@ -6,7 +6,7 @@ Spec-Driven Develop is the workflow-control part of Domain Driven Develop. It tr
 
 Choose exactly one round unless the user explicitly asks for an end-to-end chain. Exception: Code Round should finish with Post-Implementation Sync for the same behavior.
 
-Before any non-trivial edit, read `round-artifacts.md`, create a behavior dossier, classify artifact state, then read `round-checklists.md` and create a concrete todo with observable exit criteria. Do not edit files while the current round has unknown required artifacts or unchecked mandatory todo items.
+Before any non-trivial edit, read `round-artifacts.md`, create a behavior dossier, classify artifact state, then read `round-checklists.md` and create a concrete todo with observable exit criteria. If the project profile adopts feature artifacts for new formal behavior, read `spec-plan-tasks-artifacts.md` and keep `spec.md`, `plan.md`, and `tasks.md` synchronized with durable project docs. Do not edit files while the current round has unknown required artifacts or unchecked mandatory todo items.
 
 ### Discover Round
 
@@ -16,6 +16,7 @@ Do this:
 
 - Read the project source-of-truth map.
 - Search operation catalogs, command/query specs, workflow specs, API contracts, and tests for the user's terms.
+- Read `event-storming-discovery.md` when behavior identity, lifecycle, events, commands, actors, aggregate ownership, or ubiquitous language are unclear.
 - Read `reporting.md` and list candidate behaviors with their governing documents, current behavior/capability state, matching operation or command/query name, rationale, and recommended next round.
 - Stop before editing unless the user chooses a behavior.
 
@@ -27,6 +28,7 @@ Do this:
 
 - Read `decisions-and-adrs.md` and update ADRs or decisions first when boundaries, ownership, lifecycle, canonical language, durable state, or public contracts change.
 - Read `roadmap-and-versioning.md` when the behavior is user-visible, release-sensitive, public-contract changing, or selected from a roadmap.
+- Read `spec-plan-tasks-artifacts.md` and create or update `spec.md` before `plan.md` or `tasks.md` when the project uses feature artifacts for this behavior.
 - Update operation maps or capability catalogs when the behavior is new.
 - Update roadmap, release, version, compatibility, deprecation, or migration expectations when the behavior changes what a release claims or exposes.
 - Update command/query, workflow, event, error, API, and testing specs together when behavior changes.
@@ -74,6 +76,7 @@ Enter Code Round only if:
 - the owning bounded context and aggregate/resource owner are known;
 - roadmap target and compatibility impact are known when the behavior is user-visible, release-sensitive, or public-contract changing;
 - relevant decisions and specs exist, or the dossier records why no new decision is needed and the change is explicitly small and local;
+- `spec.md`, `plan.md`, and `tasks.md` exist and are current when the project convention applies to this behavior;
 - error and async lifecycle contracts are clear when applicable;
 - public/API/CLI/tool entrypoint expectations are decided;
 - stable test ids, automation levels, and test bindings exist or are explicitly planned for the authorized Code Round;
@@ -110,6 +113,7 @@ Use after Code Round or when asked whether a behavior is complete.
 Check:
 
 - source-of-truth docs align with behavior;
+- feature artifacts align with durable project docs when `spec.md`/`plan.md`/`tasks.md` are used;
 - roadmap target, release claim, and compatibility impact align with implementation when relevant;
 - ubiquitous language aligns across docs, code, tests, errors, events, and entrypoints;
 - domain model ownership is respected;
@@ -132,16 +136,17 @@ Read `reporting.md` for formal aligned/not-aligned and ready/not-ready output.
 Track each relevant artifact as `done`, `ready`, `blocked`, `not-applicable`, or `deferred-gap`:
 
 1. Behavior identity
-2. Domain ownership
-3. Roadmap target and version/compatibility impact
-4. Decisions or ADRs, including no-ADR-needed rationale when applicable
-5. Command/query/API contracts
-6. Workflow/event/error specs
-7. Public documentation or help outcome
-8. Test matrix rows with stable ids and automation levels
-9. Automated tests bound to matrix ids
-10. Code/read model/entrypoint implementation
-11. Post-Implementation Sync result
+2. Feature artifact directory and `spec.md`/`plan.md`/`tasks.md` state when the convention applies
+3. Domain ownership
+4. Roadmap target and version/compatibility impact
+5. Decisions or ADRs, including no-ADR-needed rationale when applicable
+6. Command/query/API contracts
+7. Workflow/event/error specs
+8. Public documentation or help outcome
+9. Test matrix rows with stable ids and automation levels
+10. Automated tests bound to matrix ids
+11. Code/read model/entrypoint implementation
+12. Post-Implementation Sync result
 
 ## Execution Modes
 

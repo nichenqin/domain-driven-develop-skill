@@ -1,4 +1,4 @@
 interface:
   display_name: "Domain Driven Develop"
-  short_description: "Build domain-driven software from roadmap, decisions, specs, tests, and reports."
-  default_prompt: "Use Domain Driven Develop to model, test, implement, synchronize, and report this behavior from source-of-truth roadmap/version policy, decisions, specs, CQRS/event boundaries, and test ids through code."
+  short_description: "Build domain-driven software from discovery, specs, plans, tests, and reports."
+  default_prompt: "Use Domain Driven Develop to discover the domain flow, create or update spec.md/plan.md/tasks.md when appropriate, model, test, implement, synchronize, and report this behavior from source-of-truth roadmap/version policy, decisions, specs, CQRS/event boundaries, and test ids through code."

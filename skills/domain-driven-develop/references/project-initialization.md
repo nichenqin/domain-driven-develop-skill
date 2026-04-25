@@ -38,6 +38,7 @@ Create or update these artifacts when they fit the repository:
 docs/DOMAIN_MODEL.md
 docs/decisions/README.md
 docs/roadmap/README.md
+specs/README.md
 docs/operations/README.md
 docs/commands/README.md
 docs/queries/README.md
@@ -82,14 +83,15 @@ Do not duplicate project domain facts in this profile. The domain model and spec
 2. Domain model: `docs/DOMAIN_MODEL.md`.
 3. Decisions: `docs/decisions/**`.
 4. Roadmap and version policy: `docs/roadmap/**`.
-5. Operations: `docs/operations/**`.
-6. Commands: `docs/commands/**`.
-7. Queries: `docs/queries/**`.
-8. Events: `docs/events/**`.
-9. Workflows: `docs/workflows/**`.
-10. Errors: `docs/errors/**`.
-11. Testing: `docs/testing/**`.
-12. Public docs/help: `docs/documentation/**`.
+5. Feature artifacts for new formal behavior: `specs/<id>-<slug>/spec.md`, `plan.md`, and `tasks.md`.
+6. Operations: `docs/operations/**`.
+7. Commands: `docs/commands/**`.
+8. Queries: `docs/queries/**`.
+9. Events: `docs/events/**`.
+10. Workflows: `docs/workflows/**`.
+11. Errors: `docs/errors/**`.
+12. Testing: `docs/testing/**`.
+13. Public docs/help: `docs/documentation/**`.
 
 ## Required Behavior
 
@@ -163,6 +165,7 @@ Create initial docs that are useful enough for the next round:
 
 - `docs/operations/README.md`: operation map or behavior catalog.
 - `docs/roadmap/README.md`: current target, milestone policy, versioning policy, and release-gate checklist when the project needs releases.
+- `specs/README.md`: feature artifact convention for new formal behavior, including `spec.md`, `plan.md`, and `tasks.md` roles.
 - `docs/decisions/README.md`: decision record index, status conventions, and ADR/no-ADR-needed policy.
 - `docs/commands/README.md`: command naming and write-side operation specs.
 - `docs/queries/README.md`: query/read-model specs.

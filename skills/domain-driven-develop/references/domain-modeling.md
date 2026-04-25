@@ -12,13 +12,14 @@ Avoid rich DDD for simple CRUD/reporting surfaces that mainly move data around a
 
 1. Identify the bounded context.
 2. Collect ubiquitous language from source-of-truth docs and domain experts.
-3. Map upstream/downstream relationships when other bounded contexts, teams, external systems, legacy models, or published contracts are involved.
-4. Decide whether the behavior needs rich domain modeling.
-5. Choose aggregate roots by consistency boundary, not database table or UI page.
-6. Model domain-significant primitives as value objects.
-7. Put invariants and transitions in aggregate methods or value-object state machines.
-8. Put cross-aggregate orchestration in application services.
-9. Keep adapters responsible only for translation and side effects.
+3. Use `event-storming-discovery.md` when commands, events, policies, actors, or lifecycle order are unclear.
+4. Map upstream/downstream relationships when other bounded contexts, teams, external systems, legacy models, or published contracts are involved.
+5. Decide whether the behavior needs rich domain modeling.
+6. Choose aggregate roots by consistency boundary, not database table or UI page.
+7. Model domain-significant primitives as value objects.
+8. Put invariants and transitions in aggregate methods or value-object state machines.
+9. Put cross-aggregate orchestration in application services.
+10. Keep adapters responsible only for translation and side effects.
 
 ## Ubiquitous Language
 

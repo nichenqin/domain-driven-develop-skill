@@ -19,16 +19,17 @@ Do not mark a file `done` only because it exists. Its contents must answer the b
 ## Generic Artifact Graph
 
 1. Behavior identity and domain owner
-2. Ubiquitous language map
-3. Roadmap target and version/compatibility impact
-4. Decision or ADR need/no-need, with governing decision paths or no-ADR-needed rationale
-5. Local behavior specs: command/query, workflow, event, error, read model
-6. Public docs or help outcome
-7. Test matrix rows or acceptance criteria with stable ids and automation levels
-8. Implementation plan or small-scope rationale
-9. Automated tests bound to matrix ids
-10. Code, read model, and entrypoints
-11. Post-Implementation Sync report
+2. Feature artifact directory with `spec.md`, `plan.md`, and `tasks.md` when the convention applies
+3. Ubiquitous language map
+4. Roadmap target and version/compatibility impact
+5. Decision or ADR need/no-need, with governing decision paths or no-ADR-needed rationale
+6. Local behavior specs: command/query, workflow, event, error, read model
+7. Public docs or help outcome
+8. Test matrix rows or acceptance criteria with stable ids and automation levels
+9. Implementation plan or small-scope rationale
+10. Automated tests bound to matrix ids
+11. Code, read model, and entrypoints
+12. Post-Implementation Sync report
 
 Later artifacts can be `not-applicable`, but they must not be silently skipped.
 
@@ -40,6 +41,10 @@ Create or refresh this compact dossier before edits:
 ## Behavior Dossier
 
 - Behavior:
+- Feature artifact path:
+- spec.md state:
+- plan.md state:
+- tasks.md state:
 - Bounded context:
 - Domain owner:
 - Canonical terms:

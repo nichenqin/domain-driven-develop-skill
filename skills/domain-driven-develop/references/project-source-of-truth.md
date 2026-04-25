@@ -11,6 +11,7 @@ Search for the target repository's durable instructions and source-of-truth file
 - context map and integration language: `docs/context-map.md`, `docs/contexts/**`, `docs/integrations/**`, `docs/contracts/**`, or equivalent
 - decisions: `docs/decisions/**`, `adr/**`, `docs/adr/**`
 - roadmap and release/version policy: `docs/PRODUCT_ROADMAP.md`, `ROADMAP.md`, `docs/roadmap/**`, `CHANGELOG.md`, `RELEASE.md`, `docs/release/**`, `docs/versioning/**`, or equivalent
+- feature artifacts for new formal behavior: `specs/**/spec.md`, `specs/**/plan.md`, `specs/**/tasks.md`, `docs/specs/**`, or equivalent
 - behavior specs: `docs/commands/**`, `docs/queries/**`, `docs/workflows/**`, `docs/events/**`, `docs/errors/**`
 - API or transport contracts: OpenAPI, GraphQL, protobuf, oRPC, CLI specs, MCP/tool schemas
 - testing contracts: `docs/testing/**`, acceptance criteria, contract tests, e2e plans
@@ -27,7 +28,7 @@ Use this order unless the repository documents a stricter one:
 3. Behavior specs, workflow specs, error contracts, and API contracts
 4. Roadmap, release/version policy, and compatibility policy for prioritization and release impact
 5. Test matrices and executable tests
-6. Implementation plans
+6. Feature artifacts and implementation plans
 7. Current code
 8. Historical notes, migration notes, and AI scratch docs
 
@@ -44,6 +45,7 @@ Before writing domain code, answer:
 - Which command/query/workflow/event specs govern the behavior?
 - Which entrypoints expose it: API, CLI, Web, worker, MCP/tool, message consumer?
 - Which roadmap target or release/version policy applies, if this behavior is release-sensitive or user-visible?
+- Does the project convention require a feature artifact directory with `spec.md`, `plan.md`, and `tasks.md` for this behavior?
 - Which tests or matrix rows prove the behavior?
 - Which accepted decision governs the boundary, lifecycle, ownership, or public contract, or why is no new decision needed?
 
@@ -61,6 +63,7 @@ For this repository:
 - context map: `docs/context-map.md` or equivalent
 - operation map: `docs/BUSINESS_OPERATION_MAP.md`
 - roadmap/version policy: `docs/PRODUCT_ROADMAP.md`, `CHANGELOG.md`, or equivalent
+- feature artifacts: `specs/<id>-<slug>/` or equivalent
 - decisions: `docs/decisions/**`
 - command specs: `docs/commands/**`
 - workflows: `docs/workflows/**`

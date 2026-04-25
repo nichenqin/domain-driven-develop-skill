@@ -27,6 +27,7 @@ For formal work, include:
 - execution mode: incremental readiness or complete readiness;
 - target behavior;
 - behavior/capability position or state;
+- feature artifact path and `spec.md`/`plan.md`/`tasks.md` state when used;
 - roadmap target and compatibility impact when relevant;
 - governing decisions, source-of-truth docs, specs, and implementation plan read;
 - domain owner and canonical terms;
@@ -40,6 +41,7 @@ For non-trivial behavior work, report relevant artifact states:
 | Artifact | State | Notes |
 | --- | --- | --- |
 | Behavior identity and domain owner |  |  |
+| Feature artifact directory and spec/plan/tasks |  |  |
 | Roadmap target and version/compatibility impact |  |  |
 | Decision or ADR need/no-need |  |  |
 | Domain model and ubiquitous language |  |  |
