@@ -27,41 +27,31 @@ npx skills add https://github.com/nichenqin/domain-driven-develop-skill --list -
 
 Restart your agent app after installation if it does not pick up newly installed skills automatically.
 
-## Initialize A Project
+## Initialize A Project With Natural Language
 
-The global skill is intentionally generic. It becomes useful when a project has local source-of-truth docs and a thin project profile skill.
-
-From a project root:
-
-```bash
-npx github:nichenqin/domain-driven-develop-skill init --project my-project
-```
-
-This creates:
+The global skill is intentionally generic. It becomes useful when a project has local source-of-truth docs and a thin project profile skill. Ask the agent to initialize those artifacts with natural language:
 
 ```text
-.codex/skills/my-project-develop/
+Use domain-driven-develop to initialize a new CRM product in this repository. Start with Init Round: create the project profile skill, domain model, ubiquitous language, behavior/spec docs, and test matrix foundation. Do not write production code yet.
+```
+
+The Init Round should create or update local project artifacts such as:
+
+```text
+.codex/skills/<project>-develop/SKILL.md
 docs/DOMAIN_MODEL.md
-docs/decisions/README.md
-docs/commands/README.md
-docs/queries/README.md
-docs/events/README.md
-docs/workflows/README.md
-docs/errors/README.md
-docs/testing/README.md
-docs/documentation/README.md
+docs/decisions/**
+docs/operations/**
+docs/commands/**
+docs/queries/**
+docs/events/**
+docs/workflows/**
+docs/errors/**
+docs/testing/**
+docs/documentation/**
 ```
 
-Then ask Codex to use `domain-driven-develop` and the generated `<project>-develop` profile to fill the docs from your business logic.
-
-Useful commands:
-
-```bash
-npx github:nichenqin/domain-driven-develop-skill init --project my-project --force
-npx github:nichenqin/domain-driven-develop-skill doctor
-```
-
-The custom `npx github:nichenqin/domain-driven-develop-skill ...` CLI is for project bootstrapping. Use `npx skills add ...` for normal skill installation.
+The project profile should stay thin: it points back to `domain-driven-develop`, binds source-of-truth paths, and does not duplicate business facts.
 
 ## Skill Path
 

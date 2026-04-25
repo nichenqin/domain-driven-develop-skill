@@ -1,6 +1,6 @@
 ---
 name: domain-driven-develop
-description: Domain Driven Develop workflow for designing, specifying, implementing, and reviewing domain-driven software. Use when Codex needs to add or change business behavior, design or review domain models, align code with source-of-truth domain docs, apply DDD tactical patterns, use spec-driven development, place logic across domain/application/adapters, design repositories and specifications, or enforce dependency injection and inversion-of-control boundaries.
+description: Domain Driven Develop workflow for initializing, designing, specifying, implementing, and reviewing domain-driven software. Use when Codex needs to initialize a new product or project from a business idea, create project source-of-truth docs and a local project profile skill, add or change business behavior, design or review domain models, align code with source-of-truth domain docs, apply DDD tactical patterns, use spec-driven development, place logic across domain/application/adapters, design repositories and specifications, or enforce dependency injection and inversion-of-control boundaries.
 ---
 
 # Domain Driven Develop
@@ -9,7 +9,7 @@ description: Domain Driven Develop workflow for designing, specifying, implement
 
 Use this skill to develop business software from domain intent to code without losing the model. It combines a spec-driven workflow with domain-driven design guardrails, and keeps project-specific domain facts in project documents rather than inside the skill.
 
-Do not treat this skill as a generic permission to code. Use it to find or create the right source-of-truth documents, select the next development round, then implement only when the model, behavior specs, tests, and integration surfaces are sufficiently clear.
+Do not treat this skill as a generic permission to code. Use it to initialize or find the right source-of-truth documents, select the next development round, then implement only when the model, behavior specs, tests, and integration surfaces are sufficiently clear.
 
 Ubiquitous language is mandatory. The same domain terms must describe the same behavior in source-of-truth docs, code, tests, entrypoints, errors, events, and public help. If names drift, stop and reconcile the language before expanding implementation.
 
@@ -26,18 +26,19 @@ Keep these layers separate. This skill defines method and code shape. The projec
 ## First Steps
 
 1. Identify the requested behavior or modeling question.
-2. Read `references/project-source-of-truth.md` and locate the target repository's domain model, ADRs, behavior specs, API contracts, and test matrices.
-3. Read `references/spec-driven-develop.md` to choose the current round: Discover, Spec, Test-First, Code, Sync, or Post-Implementation Sync.
-4. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
-5. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
-6. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
+2. If the user asks to start a new product/project from a business idea, read `references/project-initialization.md` and enter Init Round.
+3. Otherwise read `references/project-source-of-truth.md` and locate the target repository's domain model, ADRs, behavior specs, API contracts, and test matrices.
+4. Read `references/spec-driven-develop.md` to choose the current round: Init, Discover, Spec, Docs, Test-First, Code, Sync, Next Behavior Selection, or Post-Implementation Sync.
+5. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
+6. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
+7. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
 
 ## Reference Map
 
 Load only the files needed for the current task:
 
 - `references/project-source-of-truth.md`: read before non-trivial work to bind generic categories to project files.
-- `references/project-initialization.md`: read when a repository has no project-specific profile or domain docs yet.
+- `references/project-initialization.md`: read when the user asks to initialize a new product/project or the repository has no project-specific profile/domain docs yet.
 - `references/spec-driven-develop.md`: read for workflow control, round selection, readiness gates, and sync behavior.
 - `references/round-artifacts.md`: read before non-trivial edits to build the behavior dossier, classify artifacts, and choose incremental or complete readiness.
 - `references/docs-round.md`: read when behavior changes user-visible language, input, output, status, recovery, workflows, or help surfaces.
