@@ -11,6 +11,7 @@ Use these sources for conceptual grounding. Do not paste long excerpts into user
 ## Specification Pattern
 
 - Eric Evans and Martin Fowler, "Specifications": specifications can select objects, validate suitability, support construction-to-order, and compose with `and`, `or`, and `not`. https://martinfowler.com/apsupp/spec.pdf
+- Martin Fowler, "Repository": repository mediates between domain and data mapping layers using a collection-like interface. https://martinfowler.com/eaaCatalog/repository.html
 
 ## Spec-Driven Development
 
@@ -19,3 +20,10 @@ Use these sources for conceptual grounding. Do not paste long excerpts into user
 ## Dependency Injection And IoC
 
 - Martin Fowler, "Inversion of Control Containers and the Dependency Injection pattern": separates service configuration from use, compares dependency injection and service locator, and describes constructor injection. https://martinfowler.com/articles/injection.html
+
+## Example Repositories
+
+- Vaughn Vernon, IDDD samples: https://github.com/VaughnVernon/IDDD_Samples
+- CodelyTV TypeScript DDD example: https://github.com/CodelyTV/typescript-ddd-example
+- Khalil Stemmler DDD forum: https://github.com/stemmlerjs/ddd-forum
+- Ardalis Specification: https://github.com/ardalis/Specification

@@ -15,6 +15,22 @@ Use a specification when:
 
 Avoid a specification when the rule is a one-off branch inside one application service or belongs directly inside an aggregate method.
 
+## When Not To Use A Specification
+
+Do not introduce a specification just because:
+
+- a repository needs one more filter;
+- a request DTO has many optional fields;
+- the codebase already has a spec interface;
+- the real decision about aggregate ownership is unclear.
+
+Prefer another construct when:
+
+- the invariant belongs directly in an aggregate method;
+- the behavior coordinates multiple repositories or external systems;
+- the object mostly describes paging, sorting, includes, caching, or transport concerns;
+- the rule is too ad-hoc to deserve a named domain concept.
+
 ## Composite Specs
 
 Prefer composable specs and named presets over repository business methods.
@@ -85,6 +101,31 @@ users.findByUserNameOrEmail(name.value, email.value);
 ```
 
 The repository should not need to understand that "name or email" is a business lookup rule. It should translate the spec it receives.
+
+## Builder With Explicit Grouping
+
+When a spec tree becomes non-trivial, use a builder or preset factory so grouping is impossible to misread.
+
+```ts
+const spec = UserSpecs.create()
+  .inOrganization(organizationId)
+  .andGroup((group) =>
+    group
+      .withStatus(UserStatus.active())
+      .or()
+      .withStatus(UserStatus.invited()),
+  )
+  .not((group) => group.withRole(UserRole.suspended()))
+  .build();
+```
+
+The intent is:
+
+- organization matches;
+- and status is active or invited;
+- and role is not suspended.
+
+Avoid mixing raw `and` and `or` calls where precedence is unclear.
 
 ## Visitor As Translation IoC
 
@@ -163,6 +204,38 @@ export class UpsertUserSpec {
 
 The aggregate still decides whether the mutation is valid. The mutation spec only tells the adapter how to persist an already-decided state.
 
+## Mutation-Aware Specs
+
+Mutation-aware specs are advanced. Use them only when one object must consistently support in-memory mutation and adapter-side translation of the same deterministic change.
+
+```ts
+interface MutationAwareSpec<TAggregate, TVisitor> {
+  isSatisfiedBy(candidate: TAggregate): boolean;
+  mutate(candidate: TAggregate): Result<TAggregate, DomainError>;
+  accept<TResult>(visitor: TVisitor): TResult;
+}
+
+class NormalizeUserEmailSpec implements MutationAwareSpec<User, UserMutationSpecVisitor> {
+  constructor(private readonly rawEmail: string) {}
+
+  isSatisfiedBy(user: User): boolean {
+    return user.toState().email.value !== this.rawEmail.trim().toLowerCase();
+  }
+
+  mutate(user: User): Result<User, DomainError> {
+    const email = UserEmail.create(this.rawEmail);
+    if (email.isErr()) return err(email.error);
+    return user.changeEmail(email.value);
+  }
+
+  accept<TResult>(visitor: UserMutationSpecVisitor<TResult>): TResult {
+    return visitor.visitNormalizeUserEmail(this);
+  }
+}
+```
+
+Do not use mutation-aware specs for workflows that need permissions, multiple repositories, external APIs, or branching orchestration. Those belong in application services.
+
 ## Exhaustiveness
 
 When adding a new spec:
@@ -172,3 +245,12 @@ When adding a new spec:
 - update in-memory/test visitors;
 - add tests proving both `isSatisfiedBy` and adapter translation;
 - avoid default visitor branches that silently ignore unknown specs.
+
+## Anti-Patterns
+
+- Fat god spec: one object with many optional fields, modes, and caller-specific behavior.
+- Spec as DTO: `{ field, op, value }` with domain names painted on top.
+- Infrastructure inside spec: database, cache, HTTP, filesystem, or provider calls.
+- Aggregate invariant extracted into a spec with no reuse or translation need.
+- Silent visitor drift: new spec type added but one adapter visitor is not updated.
+- Repository owns business policy: repository decides whether the spec is valid instead of translating it.

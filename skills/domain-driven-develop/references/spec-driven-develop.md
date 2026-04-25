@@ -6,6 +6,8 @@ Spec-Driven Develop is the workflow-control part of Domain Driven Develop. It tr
 
 Choose exactly one round unless the user explicitly asks for an end-to-end chain. Exception: Code Round should finish with Post-Implementation Sync for the same behavior.
 
+Before any non-trivial edit, read `round-artifacts.md`, create a behavior dossier, classify artifact state, and create a concrete todo with observable exit criteria. Do not edit files while the current round has unknown required artifacts.
+
 ### Discover Round
 
 Use when the behavior is not selected.
@@ -26,9 +28,23 @@ Do this:
 - Update ADRs or decisions first when boundaries change.
 - Update operation maps or capability catalogs when the behavior is new.
 - Update command/query, workflow, event, error, API, and testing specs together when behavior changes.
+- Align ubiquitous language across specs, code names, tests, events, errors, and entrypoints. If a term changes, update every normative surface in the same round or record a migration gap.
 - Record temporary implementation gaps only as migration notes, never as weakened normative behavior.
 
 Do not change production code in Spec Round.
+
+### Docs Round
+
+Use when behavior changes user-visible input, output, status, recovery, workflow sequencing, entrypoint affordances, or help text.
+
+Do this:
+
+- Read `docs-round.md`.
+- Decide whether the behavior needs a task page, concept page, reference page, troubleshooting page, stable anchor on an existing page, not-user-facing reason, or explicit migration gap.
+- Keep public docs task-oriented and aligned with the ubiquitous language.
+- Record help surfaces for API, CLI, Web, config, messages, and future tools when relevant.
+
+Do not change business code in Docs Round unless the user explicitly authorizes a chained round.
 
 ### Test-First Round
 
@@ -59,6 +75,7 @@ Do this:
 
 - Implement the smallest coherent behavior slice.
 - Keep entrypoints thin and converge on shared command/query/application semantics.
+- Use the bounded context's ubiquitous language in type names, method names, event names, error names, test names, and entrypoint names. If a different transport name is required, translate at the boundary and document the alias.
 - Keep domain decisions in aggregates, value objects, domain services, or application services, not in adapters or repositories.
 - Update tests according to the governing specs.
 - Update docs only when behavior meaning, gaps, or coverage changed.
@@ -82,6 +99,7 @@ Use after Code Round or when asked whether a behavior is complete.
 Check:
 
 - source-of-truth docs align with behavior;
+- ubiquitous language aligns across docs, code, tests, errors, events, and entrypoints;
 - domain model ownership is respected;
 - command/query/workflow/error/API contracts align with implementation;
 - tests cover changed behavior at the right boundary;
@@ -104,6 +122,47 @@ Track each relevant artifact as `done`, `ready`, `blocked`, `not-applicable`, or
 8. Automated tests
 9. Code/read model/entrypoint implementation
 10. Post-Implementation Sync result
+
+## Execution Modes
+
+Use incremental readiness when requirements are still being discovered, a decision needs review, or the next artifact can be completed independently. Create or reconcile exactly one ready artifact, refresh the dossier, and stop.
+
+Use complete readiness when scope is clear and the user asks to prepare or finish readiness. Complete every ready governance artifact needed to reach the next permission boundary, but do not cross into Code Round unless implementation is authorized.
+
+## ADR Or Decision Escalation
+
+Create or update a decision record before local specs or code when a change touches:
+
+- command/query boundary;
+- aggregate ownership or lifecycle ownership;
+- lifecycle stages, readiness gates, retry semantics, rollback semantics, or async acceptance;
+- durable state shape;
+- cross-boundary naming or canonical language;
+- route/domain/security/public-contract semantics;
+- long-running workflow behavior.
+
+Do not resolve these issues only by changing implementation.
+
+## Entrypoint Surface Gate
+
+When a behavior becomes user-visible or changes user-controlled input, classify each relevant surface:
+
+- API;
+- CLI;
+- Web/UI;
+- message consumer or worker;
+- repository/config file;
+- public docs/help;
+- future tool or MCP entrypoint.
+
+Use one state per surface:
+
+- implemented input or selection affordance;
+- read-only/status-only affordance;
+- intentionally not applicable, with domain reason;
+- deferred migration gap, with missing schema/command/UI/help work named.
+
+Do not call a behavior fully exposed when only one first-class surface supports the new semantics.
 
 ## Output Contract
 

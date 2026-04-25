@@ -11,6 +11,8 @@ Use this skill to develop business software from domain intent to code without l
 
 Do not treat this skill as a generic permission to code. Use it to find or create the right source-of-truth documents, select the next development round, then implement only when the model, behavior specs, tests, and integration surfaces are sufficiently clear.
 
+Ubiquitous language is mandatory. The same domain terms must describe the same behavior in source-of-truth docs, code, tests, entrypoints, errors, events, and public help. If names drift, stop and reconcile the language before expanding implementation.
+
 ## Operating Model
 
 Domain Driven Develop has three layers:
@@ -27,7 +29,8 @@ Keep these layers separate. This skill defines method and code shape. The projec
 2. Read `references/project-source-of-truth.md` and locate the target repository's domain model, ADRs, behavior specs, API contracts, and test matrices.
 3. Read `references/spec-driven-develop.md` to choose the current round: Discover, Spec, Test-First, Code, Sync, or Post-Implementation Sync.
 4. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
-5. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
+5. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
+6. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
 
 ## Reference Map
 
@@ -35,21 +38,30 @@ Load only the files needed for the current task:
 
 - `references/project-source-of-truth.md`: read before non-trivial work to bind generic categories to project files.
 - `references/spec-driven-develop.md`: read for workflow control, round selection, readiness gates, and sync behavior.
+- `references/round-artifacts.md`: read before non-trivial edits to build the behavior dossier, classify artifacts, and choose incremental or complete readiness.
+- `references/docs-round.md`: read when behavior changes user-visible language, input, output, status, recovery, workflows, or help surfaces.
+- `references/next-behavior-selection.md`: read when choosing the next behavior after a behavior is implemented or mostly implemented.
 - `references/domain-modeling.md`: read when discovering bounded contexts, ubiquitous language, ownership, lifecycle, and whether DDD is warranted.
+- `references/context-boundaries.md`: read when bounded context, execution context, domain context, tracing, transactions, or i18n concerns are mixed.
+- `references/error-handling.md`: read when modeling expected domain/application failures, error taxonomy, adapter translation, or no-throw Result style.
 - `references/aggregate-root.md`: read when creating or changing aggregate roots, entities, invariants, state transitions, or domain events.
 - `references/value-object.md`: read when modeling IDs, names, statuses, money, addresses, timestamps, ranges, or other domain-significant values.
+- `references/domain-service.md`: read when a pure domain rule does not naturally belong to one aggregate or value object.
 - `references/repository.md`: read when designing repository ports, persistence adapters, read models, or selection/mutation boundaries.
 - `references/specification-and-visitor.md`: read when creating reusable business predicates, query/update specs, composite specs, SQL/API translation visitors, or avoiding `findBy...` repository proliferation.
 - `references/application-layer.md`: read when placing orchestration, command/query handlers, use cases, unit-of-work boundaries, event publication, and side effects.
 - `references/dependency-injection-ioc.md`: read when wiring dependencies, deciding constructor injection versus service locator, or keeping composition separate from use.
 - `references/language-typescript.md`: read when the target implementation uses TypeScript or when examples need a concrete language.
 - `references/verification.md`: read before finishing Code or Sync work.
+- `references/review-checklist.md`: read for domain-driven implementation review or before finalizing substantial changes.
+- `references/example-repositories.md`: read when concrete public examples would help calibrate tradeoffs.
 - `references/reading-list.md`: use for source links and conceptual grounding.
 
 ## Hard Rules
 
 - Project source-of-truth documents override this skill's examples.
 - Do not duplicate project domain facts inside this skill. Point to project files instead.
+- Use the bounded context's ubiquitous language consistently in docs, code, tests, events, errors, APIs, CLI commands, and UI/help text. Do not introduce synonyms, transport-only names, or legacy aliases without documenting the mapping.
 - Do not put persistence, framework, transport, tracing SDK, queue, filesystem, or provider SDK logic inside aggregates, entities, value objects, or specifications.
 - Do not let repositories answer business-policy questions. Repositories load, persist, and translate specifications; aggregates and application services make business decisions.
 - Do not add broad update commands or generic setters when a domain operation can name the intent.
@@ -62,7 +74,8 @@ When Code Round touches the domain model, apply these references together:
 
 1. Project-specific domain facts from the target repository.
 2. `references/domain-modeling.md`
-3. The relevant tactical reference, such as aggregate root, value object, repository, specification/visitor, application layer, or DI/IoC.
-4. `references/verification.md` before final output.
+3. `references/round-artifacts.md` for dossier and artifact readiness when the change is non-trivial.
+4. The relevant tactical reference, such as aggregate root, value object, repository, specification/visitor, application layer, error handling, context boundaries, or DI/IoC.
+5. `references/verification.md` before final output.
 
 Use examples as patterns, not as project facts.

@@ -7,6 +7,7 @@ Use this reference before finishing Code Round, Sync Round, or a domain-modeling
 Check that:
 
 - the behavior has a named owner in the project domain model or a documented decision;
+- ubiquitous language has a canonical term map or the equivalent is clear from source-of-truth docs;
 - relevant command/query/API/workflow/error specs exist or are documented as not applicable;
 - entrypoints are implemented or explicitly deferred;
 - tests cover the changed behavior at the right boundary;
@@ -17,6 +18,7 @@ Check that:
 
 Check that:
 
+- canonical domain terms are used in aggregate, value object, command, query, event, error, and test names;
 - aggregate boundaries match project source-of-truth docs;
 - value objects protect domain-significant values;
 - aggregate methods enforce transitions and invariants;
@@ -30,6 +32,7 @@ Check that:
 Check that:
 
 - names align across specs, code, tests, docs, and entrypoints;
+- compatibility aliases are documented at boundaries and do not replace the canonical domain term inside the model;
 - command/query schemas are reused by transports instead of redefined;
 - source-of-truth docs and implementation do not contradict each other;
 - new specs update every visitor and test translation path;
@@ -44,3 +47,51 @@ Report:
 - which domain references were applied;
 - verification commands and results;
 - remaining gaps or open decisions.
+
+## Severity
+
+Use these severities:
+
+| Severity | Meaning |
+| --- | --- |
+| `CRITICAL` | Required artifact, required entrypoint, passing required test, canonical term alignment, or normative behavior is missing. The behavior is not aligned. |
+| `WARNING` | Behavior can be understood but has weak coverage, non-blocking drift, incomplete docs, or a documented but unresolved alias/migration issue. |
+| `SUGGESTION` | Cleanup, naming, or maintainability improvement that does not change readiness. |
+
+Return `aligned` only when no `CRITICAL` findings remain, required tests pass or have documented exceptions, user-visible behavior has a docs/help outcome, and source-of-truth docs, code, tests, and entrypoints use the same domain language or documented aliases.
+
+## Report Shape
+
+```markdown
+## Verification Report
+
+- Behavior:
+- Round:
+- Result: aligned | not aligned
+- Ready to move on: yes | no
+
+### Completeness
+- Status:
+- CRITICAL:
+- WARNING:
+- SUGGESTION:
+
+### Correctness
+- Status:
+- CRITICAL:
+- WARNING:
+- SUGGESTION:
+
+### Coherence
+- Status:
+- CRITICAL:
+- WARNING:
+- SUGGESTION:
+
+### Required Follow-Up
+- Docs:
+- Tests:
+- Code:
+- Decisions:
+- Migration gaps:
+```
