@@ -24,6 +24,11 @@ Use these sources for conceptual grounding. Do not paste long excerpts into user
 - Microsoft Azure Architecture Center, "CQRS pattern": commands update data and queries read data, with separate models and consistency tradeoffs when useful. https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
 - Microsoft Learn, "Implementing reads/queries in a CQRS microservice": read models and DTOs can be shaped directly for client needs and do not need aggregate purity. https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/cqrs-microservice-reads
 
+## Domain Events
+
+- Martin Fowler, "Domain Event": domain events record something that happened in the domain and can trigger reactions without coupling the producer to every consumer. https://martinfowler.com/eaaDev/DomainEvent.html
+- microservices.io, "Transactional outbox": persist messages in the same transaction as the aggregate update, then relay them to avoid publishing facts for failed writes. https://microservices.io/patterns/data/transactional-outbox.html
+
 ## Dependency Injection And IoC
 
 - Martin Fowler, "Inversion of Control Containers and the Dependency Injection pattern": separates service configuration from use, compares dependency injection and service locator, and describes constructor injection. https://martinfowler.com/articles/injection.html

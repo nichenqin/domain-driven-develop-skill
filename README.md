@@ -69,6 +69,7 @@ skills/domain-driven-develop
 - ADR/decision-record gating for durable boundary, lifecycle, ownership, language, persistence, and public-contract choices.
 - Ubiquitous language alignment across docs, code, tests, events, errors, and entrypoints.
 - CQRS with DDD guidance for command/query separation, read models, projections, events, and consistency tradeoffs.
+- Domain and integration event guidance for naming, payloads, publication boundaries, handlers, projections, replay/backfill, and testing.
 - Testing/Test-First Round traceability with stable matrix ids, automation levels, and implementation test bindings.
 - Round checklists, Discovery reports, artifact-state reports, coverage reports, and ready/not-ready verification.
 - Aggregate roots, value objects, domain services, repositories, application services, specifications, visitors, dependency injection, and inversion of control.

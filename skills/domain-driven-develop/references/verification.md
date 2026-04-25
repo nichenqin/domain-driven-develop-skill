@@ -11,6 +11,7 @@ Check that:
 - ubiquitous language has a canonical term map or the equivalent is clear from source-of-truth docs;
 - relevant command/query/API/workflow/error specs exist or are documented as not applicable;
 - command/query split, read model ownership, and consistency expectations are documented when CQRS applies;
+- event producer, payload, publication boundary, consumers, projection effects, and retry/idempotency/replay expectations are documented when events change;
 - changed behavior has stable test ids, automation levels, and automated test bindings or documented exceptions;
 - entrypoints are implemented or explicitly deferred;
 - tests cover the changed behavior at the right boundary;
@@ -30,6 +31,7 @@ Check that:
 - application services orchestrate without hiding domain policy;
 - command handlers coordinate write-side decisions without hiding invariants in buses, controllers, or repositories;
 - query handlers return read-optimized models without mutating business state;
+- event handlers do not own the original write-side decision or bypass aggregate invariants;
 - repositories load/persist and translate specs without business decisions;
 - adapters do not leak infrastructure types into domain/core;
 - expected domain failures return explicit errors or results.
@@ -44,6 +46,7 @@ Check that:
 - command/query schemas are reused by transports instead of redefined;
 - entrypoints dispatch through shared application semantics rather than duplicating business behavior;
 - read-side DTOs or projections do not leak back into aggregate state as the source of truth;
+- domain events and integration events are distinguished, and external event contracts are versioned or documented when compatibility matters;
 - source-of-truth docs and implementation do not contradict each other;
 - local specs do not override accepted decisions without a new decision record;
 - implementation plans still describe the implemented slice or are updated as migration gaps;

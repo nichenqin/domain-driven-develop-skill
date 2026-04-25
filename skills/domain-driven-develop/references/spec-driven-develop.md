@@ -28,6 +28,7 @@ Do this:
 - Read `decisions-and-adrs.md` and update ADRs or decisions first when boundaries, ownership, lifecycle, canonical language, durable state, or public contracts change.
 - Update operation maps or capability catalogs when the behavior is new.
 - Update command/query, workflow, event, error, API, and testing specs together when behavior changes.
+- Read `domain-events.md` before adding or changing event semantics, consumers, projections, integration contracts, outbox/publication, replay, or backfill behavior.
 - Align ubiquitous language across specs, code names, tests, events, errors, and entrypoints. If a term changes, update every normative surface in the same round or record a migration gap.
 - Record temporary implementation gaps only as migration notes, never as weakened normative behavior.
 
@@ -109,6 +110,7 @@ Check:
 - ubiquitous language aligns across docs, code, tests, errors, events, and entrypoints;
 - domain model ownership is respected;
 - command/query/workflow/error/API contracts align with implementation;
+- event producer, publication boundary, handler, projection, retry/idempotency, and replay/backfill semantics align with specs when events change;
 - command/query separation and read/write consistency expectations are explicit when CQRS applies;
 - tests cover changed behavior at the right boundary;
 - changed test matrix ids are bound to passing tests or documented exceptions;

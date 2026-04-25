@@ -62,6 +62,7 @@ When behavior changes, check and synchronize:
 - command/query specs and implementation;
 - workflow/process specs and implementation;
 - event specs and publisher/consumer behavior;
+- event publication, outbox, handler, projection, retry, idempotency, replay, and backfill policy when events change;
 - error specs and result/exception shape;
 - test matrix ids, automation levels, and automated tests with matching ids;
 - read models/projections when observable state changes;

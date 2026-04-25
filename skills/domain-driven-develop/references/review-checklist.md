@@ -46,6 +46,8 @@ Use this checklist for domain-driven implementation reviews and before finalizin
 - Do entrypoints dispatch shared command/query/application semantics instead of duplicating behavior?
 - Are domain events published after the domain decision and persistence boundary required by the project?
 - Are domain events and integration events clearly distinguished?
+- Are event handlers/projections idempotent when duplicate delivery or replay is possible?
+- Are event payloads named in ubiquitous language and free of accidental persistence internals?
 
 ## Errors And Tests
 

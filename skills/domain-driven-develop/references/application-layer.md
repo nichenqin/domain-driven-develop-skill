@@ -3,6 +3,7 @@
 Use this reference when placing command/query handlers, use cases, orchestration, unit-of-work boundaries, event publication, and side effects.
 
 When the project uses CQRS or the change affects read/write separation, also read `cqrs-with-ddd.md`.
+When a change creates, publishes, consumes, projects, or replays events, also read `domain-events.md`.
 
 ## Rule
 
@@ -99,3 +100,5 @@ They should not:
 ## Events
 
 Publish domain events after the aggregate decision and after the main persistence boundary succeeds, unless the project explicitly uses event sourcing or another documented model.
+
+Application services may collect domain events from aggregates and persist outbox/event records. Event handlers may update read models, start follow-up workflows, or translate to integration events, but they should not decide whether the original aggregate transition was valid.

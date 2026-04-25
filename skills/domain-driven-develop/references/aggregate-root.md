@@ -2,6 +2,8 @@
 
 Use this reference when creating or changing aggregate roots, entities, invariants, lifecycle transitions, or domain events.
 
+When a change creates, emits, or renames events, also read `domain-events.md`.
+
 ## Rule
 
 An aggregate root is the consistency boundary for a cluster of domain state. It is the only external entry point for changes inside that boundary.
@@ -16,6 +18,7 @@ Choose an aggregate root because it must protect invariants, not because a table
 - Invalid transitions return explicit domain errors or result values.
 - Cross-aggregate references use IDs, not deep object graphs.
 - Domain events describe meaningful state changes after the aggregate decision is made.
+- Domain events are facts produced by valid aggregate behavior; application services own persistence and publication policy.
 - Persistence shape is not visible in aggregate APIs.
 
 ## TypeScript Sketch

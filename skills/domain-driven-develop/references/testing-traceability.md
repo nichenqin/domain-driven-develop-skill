@@ -55,6 +55,7 @@ Do this:
 - include the id in each automated test name or in a nearby test metadata/comment convention already used by the project;
 - record expected status before Code Round, usually failing for new behavior and passing for existing behavior being refactored;
 - record explicit exceptions when a row is manual, not applicable, or deferred.
+- for event behavior, include rows for emitted events, consumed events, payload fields, projection effects, idempotency, retry, and replay/backfill when applicable.
 
 Do not change production behavior in Testing Round unless the user explicitly authorizes a chained Code Round.
 

@@ -124,6 +124,8 @@ Treat eventual consistency as a product and operational concern, not only a tech
 
 ## Events
 
+Read `domain-events.md` for detailed event design, publication, handler, projection, replay, and testing rules.
+
 Domain events and integration events are different:
 
 - domain events describe meaningful facts inside the write-side model or bounded context;
