@@ -17,6 +17,10 @@ Use these sources for conceptual grounding. Do not paste long excerpts into user
 
 - GitHub Spec Kit, "Spec-Driven Development": specs become the central source of truth and code serves the specification. https://github.com/github/spec-kit/blob/main/spec-driven.md
 
+## Versioning
+
+- Semantic Versioning 2.0.0: version changes communicate public API compatibility; projects must define a public API before applying SemVer. https://semver.org/
+
 ## CQRS
 
 - Martin Fowler, "CQRS": CQRS separates command and query models where the split earns its complexity, and warns that it is risky for many systems. https://martinfowler.com/bliki/CQRS.html

@@ -7,6 +7,7 @@ Use this reference before finishing Code Round, Sync Round, or a domain-modeling
 Check that:
 
 - the behavior has a named owner in the project domain model or a documented decision;
+- roadmap target and version/compatibility impact are classified when the behavior is user-visible, release-sensitive, or public-contract changing;
 - ADR/decision need was classified, and Code Round has no unresolved required decision records;
 - ubiquitous language has a canonical term map or the equivalent is clear from source-of-truth docs;
 - relevant command/query/API/workflow/error specs exist or are documented as not applicable;
@@ -18,6 +19,7 @@ Check that:
 - write-side commands have read/query/status observability unless explicitly scoped out;
 - public docs or help surfaces are handled when the behavior is user-visible;
 - capability or operation catalog entries are synchronized when the project has them;
+- roadmap, changelog, release-note, deprecation, or migration artifacts are synchronized when the project uses them and the change is release-sensitive;
 - migration gaps are explicit.
 
 ## Correctness
@@ -48,6 +50,7 @@ Check that:
 - read-side DTOs or projections do not leak back into aggregate state as the source of truth;
 - domain events and integration events are distinguished, and external event contracts are versioned or documented when compatibility matters;
 - source-of-truth docs and implementation do not contradict each other;
+- release claims do not contradict the roadmap, public docs, tests, or implementation state;
 - local specs do not override accepted decisions without a new decision record;
 - implementation plans still describe the implemented slice or are updated as migration gaps;
 - new specs update every visitor and test translation path;
@@ -60,6 +63,7 @@ Report:
 
 - what changed;
 - which source-of-truth docs governed the work;
+- roadmap target and version/compatibility impact when relevant;
 - which domain references were applied;
 - verification commands and results;
 - remaining gaps or open decisions.

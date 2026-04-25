@@ -20,19 +20,21 @@ Rules:
 
 | Round | Required outcomes |
 | --- | --- |
-| Discover Round | Source-of-truth map read, search terms checked across operations/specs/tests/contracts, candidate table prepared, no edits made before user chooses a behavior. |
-| Spec Round | Governing docs read, behavior identity positioned, ADR need/no-need classified, affected command/query/workflow/event/error/testing/docs identified, implementation plan need decided, migration gaps and open questions updated. |
+| Discover Round | Source-of-truth map read, search terms checked across roadmap/operations/specs/tests/contracts, candidate table prepared with roadmap/version relevance when applicable, no edits made before user chooses a behavior. |
+| Spec Round | Governing docs read, behavior identity positioned, roadmap/version impact classified when relevant, ADR need/no-need classified, affected command/query/workflow/event/error/testing/docs identified, implementation plan need decided, migration gaps and open questions updated. |
 | Docs Round | Public-docs governance read when present, target page/anchor or not-user-facing reason decided, help surfaces checked, locale/search/agent-readable docs impact recorded when applicable. |
-| Testing/Test-First Round | Stable matrix ids, automation level for each row, user-observable acceptance/e2e row or exception, lower-level rows, test filenames/names or metadata, expected failing/passing state. |
-| Code Round | Domain/application/persistence/read-model/event/error changes, entrypoint changes, public docs requirement, capability catalog sync when present, read/query observability path, verification commands. |
-| Sync Round | Specs, decisions, docs, tests, implementation, entrypoints, migration gaps, and test bindings compared; target artifact to change selected. |
-| Post-Implementation Sync | Spec alignment, workflow alignment, error alignment, test matrix alignment, public docs alignment, bus/schema/contract alignment, migration gaps, open questions/decision need, ready/not-ready result. |
+| Testing/Test-First Round | Stable matrix ids, automation level for each row, compatibility/migration rows when version impact is not `none`, user-observable acceptance/e2e row or exception, lower-level rows, test filenames/names or metadata, expected failing/passing state. |
+| Code Round | Domain/application/persistence/read-model/event/error changes, entrypoint changes, roadmap/version impact, public docs requirement, capability catalog sync when present, read/query observability path, verification commands. |
+| Sync Round | Roadmap/release claims, specs, decisions, docs, tests, implementation, entrypoints, migration gaps, and test bindings compared; target artifact to change selected. |
+| Post-Implementation Sync | Roadmap/version alignment, spec alignment, workflow alignment, error alignment, test matrix alignment, public docs alignment, bus/schema/contract alignment, migration gaps, open questions/decision need, ready/not-ready result. |
 
 ## Coverage Checklist
 
 Classify each relevant surface as `done`, `not-applicable`, `deferred-gap`, or `blocked`:
 
 - command;
+- roadmap/release target;
+- public compatibility/deprecation/migration policy;
 - query/read model;
 - event;
 - workflow;
@@ -57,6 +59,7 @@ Do not call a user-visible write-side command complete when the only confirmatio
 When behavior changes, check and synchronize:
 
 - behavior map or capability catalog;
+- roadmap, release plan, version policy, changelog, release-note inputs, or migration guide when the project has them;
 - domain model and ubiquitous language;
 - decision records when boundaries change;
 - command/query specs and implementation;

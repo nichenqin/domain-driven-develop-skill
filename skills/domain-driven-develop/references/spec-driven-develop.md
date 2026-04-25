@@ -26,7 +26,9 @@ Use when behavior semantics, ownership, lifecycle, errors, or entrypoints are un
 Do this:
 
 - Read `decisions-and-adrs.md` and update ADRs or decisions first when boundaries, ownership, lifecycle, canonical language, durable state, or public contracts change.
+- Read `roadmap-and-versioning.md` when the behavior is user-visible, release-sensitive, public-contract changing, or selected from a roadmap.
 - Update operation maps or capability catalogs when the behavior is new.
+- Update roadmap, release, version, compatibility, deprecation, or migration expectations when the behavior changes what a release claims or exposes.
 - Update command/query, workflow, event, error, API, and testing specs together when behavior changes.
 - Read `domain-events.md` before adding or changing event semantics, consumers, projections, integration contracts, outbox/publication, replay, or backfill behavior.
 - Align ubiquitous language across specs, code names, tests, events, errors, and entrypoints. If a term changes, update every normative surface in the same round or record a migration gap.
@@ -70,6 +72,7 @@ Use only when governance is sufficient.
 Enter Code Round only if:
 
 - the owning bounded context and aggregate/resource owner are known;
+- roadmap target and compatibility impact are known when the behavior is user-visible, release-sensitive, or public-contract changing;
 - relevant decisions and specs exist, or the dossier records why no new decision is needed and the change is explicitly small and local;
 - error and async lifecycle contracts are clear when applicable;
 - public/API/CLI/tool entrypoint expectations are decided;
@@ -107,6 +110,7 @@ Use after Code Round or when asked whether a behavior is complete.
 Check:
 
 - source-of-truth docs align with behavior;
+- roadmap target, release claim, and compatibility impact align with implementation when relevant;
 - ubiquitous language aligns across docs, code, tests, errors, events, and entrypoints;
 - domain model ownership is respected;
 - command/query/workflow/error/API contracts align with implementation;
@@ -129,14 +133,15 @@ Track each relevant artifact as `done`, `ready`, `blocked`, `not-applicable`, or
 
 1. Behavior identity
 2. Domain ownership
-3. Decisions or ADRs, including no-ADR-needed rationale when applicable
-4. Command/query/API contracts
-5. Workflow/event/error specs
-6. Public documentation or help outcome
-7. Test matrix rows with stable ids and automation levels
-8. Automated tests bound to matrix ids
-9. Code/read model/entrypoint implementation
-10. Post-Implementation Sync result
+3. Roadmap target and version/compatibility impact
+4. Decisions or ADRs, including no-ADR-needed rationale when applicable
+5. Command/query/API contracts
+6. Workflow/event/error specs
+7. Public documentation or help outcome
+8. Test matrix rows with stable ids and automation levels
+9. Automated tests bound to matrix ids
+10. Code/read model/entrypoint implementation
+11. Post-Implementation Sync result
 
 ## Execution Modes
 
@@ -190,6 +195,7 @@ For formal work, report:
 - round type;
 - target behavior;
 - behavior/capability state;
+- roadmap target and compatibility impact when relevant;
 - governing docs;
 - domain owner;
 - artifact state when non-trivial;

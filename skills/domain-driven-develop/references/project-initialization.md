@@ -25,6 +25,7 @@ Capture:
 - key workflows;
 - entities users naturally name;
 - user-visible entrypoints;
+- expected roadmap or versioning style if mentioned;
 - compliance, security, or audit constraints if mentioned;
 - language preferences and supported locales if mentioned.
 
@@ -36,6 +37,7 @@ Create or update these artifacts when they fit the repository:
 .codex/skills/<project>-develop/SKILL.md
 docs/DOMAIN_MODEL.md
 docs/decisions/README.md
+docs/roadmap/README.md
 docs/operations/README.md
 docs/commands/README.md
 docs/queries/README.md
@@ -79,14 +81,15 @@ Do not duplicate project domain facts in this profile. The domain model and spec
 1. Repository rules: `AGENTS.md`, `CONTRIBUTING.md`, or equivalent when present.
 2. Domain model: `docs/DOMAIN_MODEL.md`.
 3. Decisions: `docs/decisions/**`.
-4. Operations: `docs/operations/**`.
-5. Commands: `docs/commands/**`.
-6. Queries: `docs/queries/**`.
-7. Events: `docs/events/**`.
-8. Workflows: `docs/workflows/**`.
-9. Errors: `docs/errors/**`.
-10. Testing: `docs/testing/**`.
-11. Public docs/help: `docs/documentation/**`.
+4. Roadmap and version policy: `docs/roadmap/**`.
+5. Operations: `docs/operations/**`.
+6. Commands: `docs/commands/**`.
+7. Queries: `docs/queries/**`.
+8. Events: `docs/events/**`.
+9. Workflows: `docs/workflows/**`.
+10. Errors: `docs/errors/**`.
+11. Testing: `docs/testing/**`.
+12. Public docs/help: `docs/documentation/**`.
 
 ## Required Behavior
 
@@ -159,6 +162,7 @@ Events:
 Create initial docs that are useful enough for the next round:
 
 - `docs/operations/README.md`: operation map or behavior catalog.
+- `docs/roadmap/README.md`: current target, milestone policy, versioning policy, and release-gate checklist when the project needs releases.
 - `docs/decisions/README.md`: decision record index, status conventions, and ADR/no-ADR-needed policy.
 - `docs/commands/README.md`: command naming and write-side operation specs.
 - `docs/queries/README.md`: query/read-model specs.

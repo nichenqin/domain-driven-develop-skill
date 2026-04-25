@@ -66,6 +66,7 @@ skills/domain-driven-develop
 - Domain Driven Develop as the entry workflow.
 - Spec-Driven Develop as process control.
 - Domain model source-of-truth binding.
+- Roadmap, release-readiness, version-target, and SemVer compatibility gates.
 - ADR/decision-record gating for durable boundary, lifecycle, ownership, language, persistence, and public-contract choices.
 - Ubiquitous language alignment across docs, code, tests, events, errors, and entrypoints.
 - CQRS with DDD guidance for command/query separation, read models, projections, events, and consistency tradeoffs.

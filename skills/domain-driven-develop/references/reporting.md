@@ -27,6 +27,7 @@ For formal work, include:
 - execution mode: incremental readiness or complete readiness;
 - target behavior;
 - behavior/capability position or state;
+- roadmap target and compatibility impact when relevant;
 - governing decisions, source-of-truth docs, specs, and implementation plan read;
 - domain owner and canonical terms;
 - verification result: aligned, not aligned, or not checked;
@@ -39,6 +40,7 @@ For non-trivial behavior work, report relevant artifact states:
 | Artifact | State | Notes |
 | --- | --- | --- |
 | Behavior identity and domain owner |  |  |
+| Roadmap target and version/compatibility impact |  |  |
 | Decision or ADR need/no-need |  |  |
 | Domain model and ubiquitous language |  |  |
 | Local command/query/workflow/event/error specs |  |  |
@@ -56,6 +58,8 @@ When behavior changes cross entrypoints or user-visible surfaces, report coverag
 | Surface | Status | Notes |
 | --- | --- | --- |
 | Command |  |  |
+| Roadmap/release target |  |  |
+| Version/compatibility policy |  |  |
 | Query/read model |  |  |
 | Event |  |  |
 | Workflow |  |  |
@@ -74,6 +78,7 @@ Include alignment lines when closing Code, Sync, or Post-Implementation work:
 
 - Spec alignment:
 - Decision alignment:
+- Roadmap/version alignment:
 - Domain language alignment:
 - Workflow alignment:
 - Error alignment:
@@ -89,6 +94,7 @@ When relevant, include:
 
 - recommended next behavior;
 - why this behavior is next;
+- roadmap target and compatibility impact;
 - next round type;
 - blockers;
 - backup candidates.

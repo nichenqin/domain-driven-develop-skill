@@ -20,14 +20,15 @@ Do not mark a file `done` only because it exists. Its contents must answer the b
 
 1. Behavior identity and domain owner
 2. Ubiquitous language map
-3. Decision or ADR need/no-need, with governing decision paths or no-ADR-needed rationale
-4. Local behavior specs: command/query, workflow, event, error, read model
-5. Public docs or help outcome
-6. Test matrix rows or acceptance criteria with stable ids and automation levels
-7. Implementation plan or small-scope rationale
-8. Automated tests bound to matrix ids
-9. Code, read model, and entrypoints
-10. Post-Implementation Sync report
+3. Roadmap target and version/compatibility impact
+4. Decision or ADR need/no-need, with governing decision paths or no-ADR-needed rationale
+5. Local behavior specs: command/query, workflow, event, error, read model
+6. Public docs or help outcome
+7. Test matrix rows or acceptance criteria with stable ids and automation levels
+8. Implementation plan or small-scope rationale
+9. Automated tests bound to matrix ids
+10. Code, read model, and entrypoints
+11. Post-Implementation Sync report
 
 Later artifacts can be `not-applicable`, but they must not be silently skipped.
 
@@ -43,6 +44,10 @@ Create or refresh this compact dossier before edits:
 - Domain owner:
 - Canonical terms:
 - Compatibility aliases:
+- Roadmap target:
+- Version target:
+- Compatibility impact: none | patch | minor | major | pre-1.0-policy | unknown
+- Affected public surfaces:
 - Current round:
 - Execution mode: incremental readiness | complete readiness
 - Code changes allowed:
@@ -60,6 +65,7 @@ Create or refresh this compact dossier before edits:
 - Automated test bindings:
 - Implementation plan:
 - Public docs page or stable anchor:
+- Changelog/release-note/migration requirement:
 - Domain/application modules:
 - Persistence/read model modules:
 - Runtime/provider/integration modules:
