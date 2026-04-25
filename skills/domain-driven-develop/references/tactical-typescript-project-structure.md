@@ -111,6 +111,44 @@ export class SpeciesId extends ScalarValueObject<string> {
 
 Do not use branded type aliases as the primary model for domain-significant values when the value needs validation, normalization, comparison, serialization, or behavior. A class with a private brand gives both behavior and nominal typing.
 
+## Primitive-Free Core Domain State
+
+Core domain aggregate/entity/value-object state should not expose naked primitives for domain concepts:
+
+```ts
+// Avoid in core domain state.
+export interface PokemonSpeciesState {
+  readonly name: string;
+  readonly nationalDexNumber: number;
+  readonly tags: readonly string[];
+}
+
+// Prefer.
+export interface PokemonSpeciesState {
+  readonly name: PokemonSpeciesName;
+  readonly nationalDexNumber: NationalDexNumber;
+  readonly tags: readonly CatalogTag[];
+}
+```
+
+Apply this to:
+
+- names, labels, codes, messages, and descriptions that belong to the domain;
+- ids and versions;
+- counts, positions, amounts, probabilities, scores, levels, stats, speeds, durations, and turn numbers;
+- flags and policies such as item clause or species clause;
+- categories and literal unions such as move category or battle mode;
+- tags, assumptions, risks, evidence lines, and next-check text.
+
+Allowed primitive boundaries:
+
+- private scalar storage inside a value object base or concrete value object;
+- raw `create(...)` and `rehydrate(...)` input parameters;
+- `toJSON()`, `toString()`, schema codecs, DTOs, CLI/API contracts, persistence rows, and tests;
+- low-level non-domain plumbing when explicitly documented, such as generic error detail payloads.
+
+If a value has no invariant today, still create a small value object when it is part of the ubiquitous language or aggregate state. This prevents later rules from leaking primitive manipulation throughout the core.
+
 ## Repository Ports
 
 Prefer repository ports shaped around aggregate roots and specifications:
@@ -173,6 +211,7 @@ Before creating behavior implementation in a new TypeScript DDD project, verify 
 - local project profile skill that points back to `domain-driven-develop` and binds local source-of-truth paths;
 - ADR for package shape when a monorepo or public contract is created;
 - aggregate root/entity/value object classification for the first modeled contexts;
+- value object inventory for every domain-significant primitive in core state;
 - repository port shape using `RepositoryContext`, selection specs, mutation specs, and `Result`;
 - specification visitor shape for persistence/read-model translation;
 - stable test ids before Code Round;

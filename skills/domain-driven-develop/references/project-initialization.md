@@ -73,6 +73,7 @@ For new TypeScript DDD projects, also read `tactical-typescript-project-structur
 - `packages/core` with `shared/` and bounded-context directories;
 - base `Result`, `DomainError`, `ValueObject`, `Entity`, `AggregateRoot`, and `DomainEvent`;
 - representative aggregate root, entity, value object, specification, and mutation-spec classes that match `docs/DOMAIN_MODEL.md`;
+- a value object inventory for domain-significant primitives so core aggregate/entity/value-object state does not use naked `string`, `number`, `boolean`, literal unions, or primitive arrays;
 - `packages/application` with command/query messages, handlers/use-case placeholders, repository/read-model ports, execution context, and operation catalog;
 - adapter/app placeholders that depend inward.
 

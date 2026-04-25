@@ -40,6 +40,53 @@ Use this pattern for IDs and scalar value objects:
 - `equals(...)` from the value object base or a local implementation;
 - explicit `toJSON()` or `toString()` only when the public representation is stable.
 
+## Primitive Quarantine
+
+In TypeScript, primitives are acceptable at the edges of a value object, not as the aggregate/entity state model itself.
+
+```ts
+export class NationalDexNumber extends ScalarValueObject<number> {
+  private [nationalDexNumberBrand]!: void;
+
+  private constructor(value: number) {
+    super(value);
+  }
+
+  static create(value: number): Result<NationalDexNumber, DomainError> {
+    if (!Number.isInteger(value) || value < 1) {
+      return err(domainError.validation("national_dex_number_invalid"));
+    }
+    return ok(new NationalDexNumber(value));
+  }
+}
+```
+
+Use raw `number` only inside `NationalDexNumber`, factory inputs, schema codecs, and serialization. Aggregate/entity state should refer to `NationalDexNumber`.
+
+Boolean policy flags also deserve value objects when they are domain language:
+
+```ts
+export class ItemClausePolicy extends ScalarValueObject<boolean> {
+  private [itemClausePolicyBrand]!: void;
+
+  private constructor(value: boolean) {
+    super(value);
+  }
+
+  static enabled(): ItemClausePolicy {
+    return new ItemClausePolicy(true);
+  }
+
+  static disabled(): ItemClausePolicy {
+    return new ItemClausePolicy(false);
+  }
+
+  isEnabled(): boolean {
+    return this.value;
+  }
+}
+```
+
 Numeric value objects may contain domain operations:
 
 ```ts
