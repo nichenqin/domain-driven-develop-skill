@@ -1,4 +1,4 @@
 interface:
   display_name: "Domain Driven Develop"
-  short_description: "Build domain-driven software from decisions, specs, tests, and reports through implementation."
-  default_prompt: "Use Domain Driven Develop to model, test, implement, synchronize, and report this behavior from source-of-truth decisions, specs, and test ids through code."
+  short_description: "Build domain-driven and CQRS software from decisions, specs, tests, and reports."
+  default_prompt: "Use Domain Driven Develop to model, test, implement, synchronize, and report this behavior from source-of-truth decisions, specs, CQRS boundaries, and test ids through code."

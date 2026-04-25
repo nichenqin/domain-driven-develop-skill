@@ -79,6 +79,7 @@ Do this:
 
 - Implement the smallest coherent behavior slice.
 - Keep entrypoints thin and converge on shared command/query/application semantics.
+- Keep CQRS boundaries explicit when present: commands change state, queries return read models, and read-side projections do not own write-side policy.
 - Include the read/query/status path and relevant user-facing entrypoint needed for a minimal observable closed loop, unless explicitly scoped out.
 - Use the bounded context's ubiquitous language in type names, method names, event names, error names, test names, and entrypoint names. If a different transport name is required, translate at the boundary and document the alias.
 - Keep domain decisions in aggregates, value objects, domain services, or application services, not in adapters or repositories.
@@ -108,6 +109,7 @@ Check:
 - ubiquitous language aligns across docs, code, tests, errors, events, and entrypoints;
 - domain model ownership is respected;
 - command/query/workflow/error/API contracts align with implementation;
+- command/query separation and read/write consistency expectations are explicit when CQRS applies;
 - tests cover changed behavior at the right boundary;
 - changed test matrix ids are bound to passing tests or documented exceptions;
 - entrypoints expose the same semantics;

@@ -17,6 +17,13 @@ Use these sources for conceptual grounding. Do not paste long excerpts into user
 
 - GitHub Spec Kit, "Spec-Driven Development": specs become the central source of truth and code serves the specification. https://github.com/github/spec-kit/blob/main/spec-driven.md
 
+## CQRS
+
+- Martin Fowler, "CQRS": CQRS separates command and query models where the split earns its complexity, and warns that it is risky for many systems. https://martinfowler.com/bliki/CQRS.html
+- Martin Fowler, "CommandQuerySeparation": asking a question should not change observable state, and changing state should not be treated as a pure query. https://martinfowler.com/bliki/CommandQuerySeparation.html
+- Microsoft Azure Architecture Center, "CQRS pattern": commands update data and queries read data, with separate models and consistency tradeoffs when useful. https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
+- Microsoft Learn, "Implementing reads/queries in a CQRS microservice": read models and DTOs can be shaped directly for client needs and do not need aggregate purity. https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/cqrs-microservice-reads
+
 ## Dependency Injection And IoC
 
 - Martin Fowler, "Inversion of Control Containers and the Dependency Injection pattern": separates service configuration from use, compares dependency injection and service locator, and describes constructor injection. https://martinfowler.com/articles/injection.html

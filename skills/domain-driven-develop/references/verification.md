@@ -10,6 +10,7 @@ Check that:
 - ADR/decision need was classified, and Code Round has no unresolved required decision records;
 - ubiquitous language has a canonical term map or the equivalent is clear from source-of-truth docs;
 - relevant command/query/API/workflow/error specs exist or are documented as not applicable;
+- command/query split, read model ownership, and consistency expectations are documented when CQRS applies;
 - changed behavior has stable test ids, automation levels, and automated test bindings or documented exceptions;
 - entrypoints are implemented or explicitly deferred;
 - tests cover the changed behavior at the right boundary;
@@ -27,6 +28,8 @@ Check that:
 - value objects protect domain-significant values;
 - aggregate methods enforce transitions and invariants;
 - application services orchestrate without hiding domain policy;
+- command handlers coordinate write-side decisions without hiding invariants in buses, controllers, or repositories;
+- query handlers return read-optimized models without mutating business state;
 - repositories load/persist and translate specs without business decisions;
 - adapters do not leak infrastructure types into domain/core;
 - expected domain failures return explicit errors or results.
@@ -40,6 +43,7 @@ Check that:
 - compatibility aliases are documented at boundaries and do not replace the canonical domain term inside the model;
 - command/query schemas are reused by transports instead of redefined;
 - entrypoints dispatch through shared application semantics rather than duplicating business behavior;
+- read-side DTOs or projections do not leak back into aggregate state as the source of truth;
 - source-of-truth docs and implementation do not contradict each other;
 - local specs do not override accepted decisions without a new decision record;
 - implementation plans still describe the implemented slice or are updated as migration gaps;

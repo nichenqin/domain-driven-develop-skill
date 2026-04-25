@@ -39,9 +39,13 @@ Use this checklist for domain-driven implementation reviews and before finalizin
 ## Application Layer
 
 - Do handlers and use cases use constructor injection or explicit parameters?
+- If CQRS applies, are commands state-changing and queries mutation-free?
+- Are read models/projections shaped for consumers without forcing aggregate purity onto reads?
+- Is read/write consistency explicit?
 - Are containers and service locators kept in composition roots?
 - Do entrypoints dispatch shared command/query/application semantics instead of duplicating behavior?
 - Are domain events published after the domain decision and persistence boundary required by the project?
+- Are domain events and integration events clearly distinguished?
 
 ## Errors And Tests
 

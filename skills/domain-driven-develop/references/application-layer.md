@@ -2,6 +2,8 @@
 
 Use this reference when placing command/query handlers, use cases, orchestration, unit-of-work boundaries, event publication, and side effects.
 
+When the project uses CQRS or the change affects read/write separation, also read `cqrs-with-ddd.md`.
+
 ## Rule
 
 The application layer coordinates domain work. It should not become the place where domain truth is hidden.
@@ -23,6 +25,17 @@ Application services should not:
 - import HTTP/CLI/Web framework request objects;
 - call dependency containers from inside methods;
 - hide provider SDK types in command schemas or domain models.
+
+## CQRS Boundary
+
+When CQRS is warranted:
+
+- commands express intent and coordinate write-side decisions;
+- queries return read-optimized data and do not perform business mutations;
+- read models may be flatter than aggregates;
+- consistency expectations between writes and reads must be explicit.
+
+Do not use command/query wrappers as ceremony around CRUD if read and write concerns are not actually different.
 
 ## Command Handler Shape
 
