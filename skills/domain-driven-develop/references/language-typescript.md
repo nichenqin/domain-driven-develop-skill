@@ -7,6 +7,8 @@ These examples are defaults, not universal requirements. If the project already 
 ## Branded Value Objects
 
 ```ts
+import { err, ok, type Result } from "./result";
+
 const orderIdBrand: unique symbol = Symbol("OrderId");
 
 export class OrderId {
@@ -21,6 +23,31 @@ export class OrderId {
 
   equals(other: OrderId): boolean {
     return this.value === other.value;
+  }
+}
+```
+
+Prefer class-based value objects over branded type aliases for domain-significant primitives. A branded alias may be acceptable at transport boundaries, but aggregate/entity state should use value object classes when the value has validation, normalization, comparison, units, ranges, or behavior.
+
+Numeric value objects may contain domain operations:
+
+```ts
+export class HP {
+  private constructor(public readonly value: number) {}
+
+  static create(value: number): Result<HP, DomainError> {
+    if (!Number.isInteger(value) || value < 0) return err(domainError.validation("hp_invalid"));
+    return ok(new HP(value));
+  }
+
+  decrease(amount: number): Result<HP, DomainError> {
+    if (!Number.isInteger(amount) || amount < 0) return err(domainError.validation("damage_invalid"));
+    return ok(new HP(Math.max(0, this.value - amount)));
+  }
+
+  increase(amount: number, max: HP): Result<HP, DomainError> {
+    if (!Number.isInteger(amount) || amount < 0) return err(domainError.validation("healing_invalid"));
+    return ok(new HP(Math.min(max.value, this.value + amount)));
   }
 }
 ```
@@ -60,6 +87,16 @@ export interface Clock {
 
 export interface IdGenerator {
   next(prefix: string): string;
+}
+```
+
+Repository ports should use repository context plus selection/mutation specs:
+
+```ts
+export interface OrderRepository {
+  findOne(context: RepositoryContext, spec: OrderSelectionSpec): Promise<Result<Order | null, DomainError>>;
+  upsert(context: RepositoryContext, order: Order, spec: OrderMutationSpec): Promise<Result<void, DomainError>>;
+  deleteOne(context: RepositoryContext, spec: OrderSelectionSpec): Promise<Result<boolean, DomainError>>;
 }
 ```
 

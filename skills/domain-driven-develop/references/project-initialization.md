@@ -51,6 +51,18 @@ docs/documentation/README.md
 
 Use existing project paths if they already exist. Do not create duplicate competing docs.
 
+For new TypeScript DDD projects, also read `tactical-typescript-project-structure.md` before creating packages or code. Init Round may create a tactical skeleton, but it should be class-based and structural only:
+
+- `packages/core` with `shared/` and bounded-context directories;
+- base `Result`, `DomainError`, `ValueObject`, `Entity`, `AggregateRoot`, and `DomainEvent`;
+- representative aggregate root, entity, value object, specification, and mutation-spec classes that match `docs/DOMAIN_MODEL.md`;
+- `packages/application` with command/query messages, handlers/use-case placeholders, repository/read-model ports, execution context, and operation catalog;
+- adapter/app placeholders that depend inward.
+
+Do not default to one package per bounded context. Split bounded contexts into packages only when an ADR documents independent lifecycle, ownership, distribution, or build constraints.
+
+If the target directory is not already a Git repository, run `git init` during Init Round unless the user explicitly says not to. This gives future Sync and Code Rounds a reliable change boundary.
+
 ## Project Profile Skill
 
 Create a thin local skill named `<project>-develop` when the repository supports local skills.
@@ -61,6 +73,8 @@ The profile should:
 - bind source-of-truth categories to local paths;
 - require ubiquitous language consistency;
 - point to `docs/DOMAIN_MODEL.md` and behavior specs;
+- bind the project's package boundaries, operation catalog, feature artifact directory, and test matrix conventions;
+- require Spec Round before Code Round for new public behavior;
 - avoid copying domain facts from the docs.
 
 Template:

@@ -41,6 +41,7 @@ Keep these layers separate. This skill defines method and code shape. The projec
 14. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
 15. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
 16. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
+17. For a new TypeScript DDD project or a structural reset, read `references/tactical-typescript-project-structure.md` before creating packages or code. Default to `core -> application -> adapters/apps` and class-based tactical domain objects unless the project source of truth explicitly chooses another architecture.
 
 ## Reference Map
 
@@ -73,6 +74,7 @@ Load only the files needed for the current task:
 - `references/application-layer.md`: read when placing orchestration, command/query handlers, use cases, unit-of-work boundaries, event publication, and side effects.
 - `references/dependency-injection-ioc.md`: read when wiring dependencies, deciding constructor injection versus service locator, or keeping composition separate from use.
 - `references/language-typescript.md`: read when the target implementation uses TypeScript or when examples need a concrete language.
+- `references/tactical-typescript-project-structure.md`: read when initializing or restructuring a TypeScript DDD project, choosing package layout, creating aggregate/entity/value-object classes, repository ports, selection/mutation specifications, visitors, command/query application layers, or adapter boundaries.
 - `references/verification.md`: read before finishing Code or Sync work.
 - `references/review-checklist.md`: read for domain-driven implementation review or before finalizing substantial changes.
 - `references/example-repositories.md`: read when concrete public examples would help calibrate tradeoffs.
@@ -95,6 +97,9 @@ Load only the files needed for the current task:
 - Do not publish event facts before the domain decision and required persistence boundary succeed. Do not let event handlers or projections own write-side business policy.
 - Do not add broad update commands or generic setters when a domain operation can name the intent.
 - Do not add service-locator calls inside domain objects, use cases, or handlers unless the project explicitly documents that exception.
+- Do not model domain-significant concepts as loose TypeScript interfaces, primitive aliases, or data bags when they have identity, invariants, lifecycle transitions, comparison, normalization, or behavior. Use classes for aggregate roots, entities, value objects, specifications, and domain services unless the project source of truth explicitly documents a different tactical style.
+- Do not create one package per bounded context by default in TypeScript projects. Prefer a small `core` package containing bounded-context directories for tactical domain objects, an `application` package for commands/queries/use cases/ports, and adapter/app packages outside the core. Split bounded contexts into separate packages only after an ADR explains the dependency and lifecycle need.
+- Do not enter Code Round for domain behavior until aggregate roots, entities, value objects, repository ports, selection/mutation specs, and visitor translation boundaries are either modeled in source-of-truth docs or explicitly marked not-applicable with a domain reason.
 - Do not settle cross-boundary architecture, ownership, lifecycle, public-contract, or canonical-language decisions only in code or local behavior specs. Create or update a decision record, or document why no decision record is needed.
 - Do not implement changed behavior without stable test matrix/spec ids and automated test bindings, unless the testing source of truth explicitly records why coverage is not applicable or deferred.
 - Do not ship release-sensitive behavior without recording roadmap target, compatibility impact, and public-surface documentation or an explicit not-applicable/deferred reason.
@@ -116,6 +121,7 @@ When Code Round touches the domain model, apply these references together:
 9. `references/testing-traceability.md` when behavior tests, acceptance criteria, or implementation coverage are in scope.
 10. `references/round-artifacts.md` for dossier and artifact readiness when the change is non-trivial.
 11. The relevant tactical reference, such as aggregate root, value object, repository, specification/visitor, application layer, error handling, context boundaries, or DI/IoC.
-12. `references/verification.md` before final output.
+12. `references/tactical-typescript-project-structure.md` when the code is TypeScript and changes package layout or core/application/adapter boundaries.
+13. `references/verification.md` before final output.
 
 Use examples as patterns, not as project facts.
