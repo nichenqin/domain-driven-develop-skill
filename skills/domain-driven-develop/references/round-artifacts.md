@@ -20,7 +20,7 @@ Do not mark a file `done` only because it exists. Its contents must answer the b
 
 1. Behavior identity and domain owner
 2. Ubiquitous language map
-3. Decision or ADR need/no-need
+3. Decision or ADR need/no-need, with governing decision paths or no-ADR-needed rationale
 4. Local behavior specs: command/query, workflow, event, error, read model
 5. Public docs or help outcome
 6. Test matrix or acceptance criteria
@@ -47,7 +47,9 @@ Create or refresh this compact dossier before edits:
 - Execution mode: incremental readiness | complete readiness
 - Code changes allowed:
 - User-visible:
+- Decision state: existing | update-required | new-required | no-ADR-needed
 - Governed decisions:
+- No-ADR-needed rationale:
 - Domain model docs:
 - Command/query specs:
 - Event specs:

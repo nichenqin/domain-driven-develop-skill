@@ -11,6 +11,7 @@ Use this checklist for domain-driven implementation reviews and before finalizin
 
 ## Domain Model
 
+- Is any boundary, lifecycle, ownership, public-contract, or canonical-language choice backed by an accepted decision or a clear no-ADR-needed rationale?
 - Is DDD justified here, or would a simpler model be clearer?
 - Are aggregate boundaries driven by invariants and consistency, not tables or screens?
 - Are entities identity-bearing and value objects immutable?

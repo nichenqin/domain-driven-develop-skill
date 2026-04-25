@@ -159,6 +159,7 @@ Events:
 Create initial docs that are useful enough for the next round:
 
 - `docs/operations/README.md`: operation map or behavior catalog.
+- `docs/decisions/README.md`: decision record index, status conventions, and ADR/no-ADR-needed policy.
 - `docs/commands/README.md`: command naming and write-side operation specs.
 - `docs/queries/README.md`: query/read-model specs.
 - `docs/events/README.md`: domain and integration event specs.
@@ -168,6 +169,8 @@ Create initial docs that are useful enough for the next round:
 - `docs/documentation/README.md`: public docs/help outcome decisions.
 
 Each should use the same ubiquitous language as `docs/DOMAIN_MODEL.md`.
+
+The decisions foundation should make clear that ADRs are required for durable boundary, lifecycle, ownership, canonical language, persistence shape, and public-contract choices, while small local behavior details can record a no-ADR-needed rationale in the behavior dossier.
 
 ## Initial Behavior Backlog
 

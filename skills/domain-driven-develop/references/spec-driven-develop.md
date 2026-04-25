@@ -25,7 +25,7 @@ Use when behavior semantics, ownership, lifecycle, errors, or entrypoints are un
 
 Do this:
 
-- Update ADRs or decisions first when boundaries change.
+- Read `decisions-and-adrs.md` and update ADRs or decisions first when boundaries, ownership, lifecycle, canonical language, durable state, or public contracts change.
 - Update operation maps or capability catalogs when the behavior is new.
 - Update command/query, workflow, event, error, API, and testing specs together when behavior changes.
 - Align ubiquitous language across specs, code names, tests, events, errors, and entrypoints. If a term changes, update every normative surface in the same round or record a migration gap.
@@ -65,7 +65,7 @@ Use only when governance is sufficient.
 Enter Code Round only if:
 
 - the owning bounded context and aggregate/resource owner are known;
-- relevant decisions and specs exist, or the change is explicitly small and local;
+- relevant decisions and specs exist, or the dossier records why no new decision is needed and the change is explicitly small and local;
 - error and async lifecycle contracts are clear when applicable;
 - public/API/CLI/tool entrypoint expectations are decided;
 - test expectations exist or the project documents why they belong in Code Round;
@@ -114,7 +114,7 @@ Track each relevant artifact as `done`, `ready`, `blocked`, `not-applicable`, or
 
 1. Behavior identity
 2. Domain ownership
-3. Decisions or ADRs
+3. Decisions or ADRs, including no-ADR-needed rationale when applicable
 4. Command/query/API contracts
 5. Workflow/event/error specs
 6. Public documentation or help outcome
@@ -131,6 +131,8 @@ Use complete readiness when scope is clear and the user asks to prepare or finis
 
 ## ADR Or Decision Escalation
 
+Read `decisions-and-adrs.md` for the full gate.
+
 Create or update a decision record before local specs or code when a change touches:
 
 - command/query boundary;
@@ -141,7 +143,7 @@ Create or update a decision record before local specs or code when a change touc
 - route/domain/security/public-contract semantics;
 - long-running workflow behavior.
 
-Do not resolve these issues only by changing implementation.
+Do not resolve these issues only by changing implementation or by adding a narrow local spec that hides the cross-cutting decision.
 
 ## Entrypoint Surface Gate
 

@@ -7,6 +7,7 @@ Use this reference before finishing Code Round, Sync Round, or a domain-modeling
 Check that:
 
 - the behavior has a named owner in the project domain model or a documented decision;
+- ADR/decision need was classified, and Code Round has no unresolved required decision records;
 - ubiquitous language has a canonical term map or the equivalent is clear from source-of-truth docs;
 - relevant command/query/API/workflow/error specs exist or are documented as not applicable;
 - entrypoints are implemented or explicitly deferred;
@@ -35,6 +36,7 @@ Check that:
 - compatibility aliases are documented at boundaries and do not replace the canonical domain term inside the model;
 - command/query schemas are reused by transports instead of redefined;
 - source-of-truth docs and implementation do not contradict each other;
+- local specs do not override accepted decisions without a new decision record;
 - new specs update every visitor and test translation path;
 - no service locator or container resolution appears outside composition code unless documented.
 

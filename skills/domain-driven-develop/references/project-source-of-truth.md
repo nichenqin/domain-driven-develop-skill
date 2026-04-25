@@ -28,7 +28,7 @@ Use this order unless the repository documents a stricter one:
 6. Current code
 7. Historical notes, migration notes, and AI scratch docs
 
-Treat current code as evidence, not as automatic truth. If code conflicts with accepted specs, decide whether the task is a Sync Round or whether the specs need a new decision first.
+Treat current code as evidence, not as automatic truth. If code conflicts with accepted decisions or specs, decide whether the task is a Sync Round or whether the decision/spec should change first.
 
 ## Bind Domain Facts
 
@@ -40,6 +40,7 @@ Before writing domain code, answer:
 - Which command/query/workflow/event specs govern the behavior?
 - Which entrypoints expose it: API, CLI, Web, worker, MCP/tool, message consumer?
 - Which tests or matrix rows prove the behavior?
+- Which accepted decision governs the boundary, lifecycle, ownership, or public contract, or why is no new decision needed?
 
 If these answers are missing, do not invent them in code. Move to Spec Round or ask for a decision.
 
