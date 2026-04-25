@@ -37,6 +37,7 @@ Keep these layers separate. This skill defines method and code shape. The projec
 Load only the files needed for the current task:
 
 - `references/project-source-of-truth.md`: read before non-trivial work to bind generic categories to project files.
+- `references/project-initialization.md`: read when a repository has no project-specific profile or domain docs yet.
 - `references/spec-driven-develop.md`: read for workflow control, round selection, readiness gates, and sync behavior.
 - `references/round-artifacts.md`: read before non-trivial edits to build the behavior dossier, classify artifacts, and choose incremental or complete readiness.
 - `references/docs-round.md`: read when behavior changes user-visible language, input, output, status, recovery, workflows, or help surfaces.
