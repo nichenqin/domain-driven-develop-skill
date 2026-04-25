@@ -165,7 +165,7 @@ Create initial docs that are useful enough for the next round:
 - `docs/events/README.md`: domain and integration event specs.
 - `docs/workflows/README.md`: multi-step workflow specs.
 - `docs/errors/README.md`: error categories, codes, and recovery semantics.
-- `docs/testing/README.md`: test matrix rows and automation levels.
+- `docs/testing/README.md`: test matrix rows, stable ids, automation levels, and test-binding conventions.
 - `docs/documentation/README.md`: public docs/help outcome decisions.
 
 Each should use the same ubiquitous language as `docs/DOMAIN_MODEL.md`.

@@ -23,9 +23,9 @@ Do not mark a file `done` only because it exists. Its contents must answer the b
 3. Decision or ADR need/no-need, with governing decision paths or no-ADR-needed rationale
 4. Local behavior specs: command/query, workflow, event, error, read model
 5. Public docs or help outcome
-6. Test matrix or acceptance criteria
+6. Test matrix rows or acceptance criteria with stable ids and automation levels
 7. Implementation plan or small-scope rationale
-8. Automated tests
+8. Automated tests bound to matrix ids
 9. Code, read model, and entrypoints
 10. Post-Implementation Sync report
 
@@ -56,6 +56,8 @@ Create or refresh this compact dossier before edits:
 - Workflow specs:
 - Error specs:
 - Testing specs or matrix ids:
+- Automation levels:
+- Automated test bindings:
 - Implementation plan:
 - Public docs page or stable anchor:
 - Domain/application modules:
@@ -125,5 +127,5 @@ Todo rules:
 - Phrase items as outcomes, not vague activities.
 - Mark items complete as they finish.
 - Add newly discovered required surfaces immediately.
-- Include spec ids, matrix ids, or behavior names when tests are in scope.
+- Include spec ids, matrix ids, automation levels, and automated test bindings when tests are in scope.
 - Do not start the next round while required items remain unchecked unless they are moved to documented migration gaps.

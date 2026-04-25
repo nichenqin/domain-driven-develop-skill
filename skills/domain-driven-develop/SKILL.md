@@ -1,6 +1,6 @@
 ---
 name: domain-driven-develop
-description: Domain Driven Develop workflow for initializing, designing, specifying, implementing, and reviewing domain-driven software. Use when Codex needs to initialize a new product or project from a business idea, create project source-of-truth docs and a local project profile skill, add or change business behavior, create or check ADRs/decision records, design or review domain models, align code with source-of-truth domain docs, apply DDD tactical patterns, use spec-driven development, place logic across domain/application/adapters, design repositories and specifications, or enforce dependency injection and inversion-of-control boundaries.
+description: Domain Driven Develop workflow for initializing, designing, specifying, implementing, and reviewing domain-driven software. Use when Codex needs to initialize a new product or project from a business idea, create project source-of-truth docs and a local project profile skill, add or change business behavior, create or check ADRs/decision records, design or review domain models, align code with source-of-truth domain docs, apply DDD tactical patterns, use spec-driven development, align test matrices with stable ids and implementation tests, place logic across domain/application/adapters, design repositories and specifications, or enforce dependency injection and inversion-of-control boundaries.
 ---
 
 # Domain Driven Develop
@@ -28,11 +28,12 @@ Keep these layers separate. This skill defines method and code shape. The projec
 1. Identify the requested behavior or modeling question.
 2. If the user asks to start a new product/project from a business idea, read `references/project-initialization.md` and enter Init Round.
 3. Otherwise read `references/project-source-of-truth.md` and locate the target repository's domain model, ADRs, behavior specs, API contracts, and test matrices.
-4. Read `references/spec-driven-develop.md` to choose the current round: Init, Discover, Spec, Docs, Test-First, Code, Sync, Next Behavior Selection, or Post-Implementation Sync.
+4. Read `references/spec-driven-develop.md` to choose the current round: Init, Discover, Spec, Docs, Testing/Test-First, Code, Sync, Next Behavior Selection, or Post-Implementation Sync.
 5. If the change may alter boundaries, lifecycle, ownership, canonical language, persistent shape, public contract, or cross-cutting policy, read `references/decisions-and-adrs.md` before local specs or code.
-6. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
-7. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
-8. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
+6. If tests, acceptance criteria, or behavior coverage are in scope, read `references/testing-traceability.md` and bind changed behavior to stable test ids before Code Round.
+7. If code touches domain concepts, aggregate/entity/value-object state, repository or specification contracts, domain events, or behavior placement, load the relevant modeling references.
+8. Verify the ubiquitous language before editing: names in docs, commands, events, tests, and code must match the bounded context language or be documented compatibility aliases.
+9. Prefer TypeScript examples in this skill when the target language is unclear. For another language, preserve the same boundaries and translate the syntax idiomatically.
 
 ## Reference Map
 
@@ -44,6 +45,7 @@ Load only the files needed for the current task:
 - `references/decisions-and-adrs.md`: read when deciding whether a behavior needs an ADR/decision record, or when changing boundaries, lifecycle, ownership, canonical language, persistence shape, or public contracts.
 - `references/round-artifacts.md`: read before non-trivial edits to build the behavior dossier, classify artifacts, and choose incremental or complete readiness.
 - `references/docs-round.md`: read when behavior changes user-visible language, input, output, status, recovery, workflows, or help surfaces.
+- `references/testing-traceability.md`: read when adding or changing behavior tests, test matrices, acceptance criteria, stable test ids, automation levels, or Code Round test bindings.
 - `references/next-behavior-selection.md`: read when choosing the next behavior after a behavior is implemented or mostly implemented.
 - `references/domain-modeling.md`: read when discovering bounded contexts, ubiquitous language, ownership, lifecycle, and whether DDD is warranted.
 - `references/context-boundaries.md`: read when bounded context, execution context, domain context, tracing, transactions, or i18n concerns are mixed.
@@ -71,6 +73,7 @@ Load only the files needed for the current task:
 - Do not add broad update commands or generic setters when a domain operation can name the intent.
 - Do not add service-locator calls inside domain objects, use cases, or handlers unless the project explicitly documents that exception.
 - Do not settle cross-boundary architecture, ownership, lifecycle, public-contract, or canonical-language decisions only in code or local behavior specs. Create or update a decision record, or document why no decision record is needed.
+- Do not implement changed behavior without stable test matrix/spec ids and automated test bindings, unless the testing source of truth explicitly records why coverage is not applicable or deferred.
 - Do not bypass source-of-truth specs during Code Round. If the intended behavior is unclear, return to Spec Round.
 
 ## Code Round Trigger
@@ -80,8 +83,9 @@ When Code Round touches the domain model, apply these references together:
 1. Project-specific domain facts from the target repository.
 2. `references/domain-modeling.md`
 3. `references/decisions-and-adrs.md` when the change crosses a decision threshold, or to record why no decision record is needed.
-4. `references/round-artifacts.md` for dossier and artifact readiness when the change is non-trivial.
-5. The relevant tactical reference, such as aggregate root, value object, repository, specification/visitor, application layer, error handling, context boundaries, or DI/IoC.
-6. `references/verification.md` before final output.
+4. `references/testing-traceability.md` when behavior tests, acceptance criteria, or implementation coverage are in scope.
+5. `references/round-artifacts.md` for dossier and artifact readiness when the change is non-trivial.
+6. The relevant tactical reference, such as aggregate root, value object, repository, specification/visitor, application layer, error handling, context boundaries, or DI/IoC.
+7. `references/verification.md` before final output.
 
 Use examples as patterns, not as project facts.

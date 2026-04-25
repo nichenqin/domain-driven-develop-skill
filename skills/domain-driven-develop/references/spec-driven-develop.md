@@ -46,15 +46,18 @@ Do this:
 
 Do not change business code in Docs Round unless the user explicitly authorizes a chained round.
 
-### Test-First Round
+### Testing Round / Test-First Round
 
-Use when specs are clear enough to write executable expectations before implementation.
+Use when specs are clear enough to assign stable test ids, select automation levels, or write executable expectations. When this happens before production code, treat it as Test-First Round.
 
 Do this:
 
+- Read `testing-traceability.md`.
 - Add or update stable test matrix rows first when the project uses them.
-- Write tests whose names reference the spec or matrix ids.
-- Include at least one user-observable or contract-level test for new commands, queries, or API operations unless the spec documents why not.
+- Assign stable ids and automation levels for every changed scenario.
+- Write or plan tests whose names or metadata reference the spec or matrix ids.
+- Keep a one-to-one trace from each changed matrix row to at least one automated test binding, or record an explicit exception.
+- Include at least one user-observable or contract-level test for new commands, queries, or API operations unless the testing source of truth documents why not.
 
 Production code changes should be limited to test harness wiring.
 
@@ -68,7 +71,7 @@ Enter Code Round only if:
 - relevant decisions and specs exist, or the dossier records why no new decision is needed and the change is explicitly small and local;
 - error and async lifecycle contracts are clear when applicable;
 - public/API/CLI/tool entrypoint expectations are decided;
-- test expectations exist or the project documents why they belong in Code Round;
+- stable test ids, automation levels, and test bindings exist or are explicitly planned for the authorized Code Round;
 - no open question would change command boundaries, ownership, lifecycle, persistence shape, or observable semantics.
 
 Do this:
@@ -78,6 +81,7 @@ Do this:
 - Use the bounded context's ubiquitous language in type names, method names, event names, error names, test names, and entrypoint names. If a different transport name is required, translate at the boundary and document the alias.
 - Keep domain decisions in aggregates, value objects, domain services, or application services, not in adapters or repositories.
 - Update tests according to the governing specs.
+- Implement only behavior covered by the changed specs and test ids. If implementation reveals a new scenario, add or update the matrix row instead of silently widening scope.
 - Update docs only when behavior meaning, gaps, or coverage changed.
 - Run Post-Implementation Sync before final output.
 
@@ -103,6 +107,7 @@ Check:
 - domain model ownership is respected;
 - command/query/workflow/error/API contracts align with implementation;
 - tests cover changed behavior at the right boundary;
+- changed test matrix ids are bound to passing tests or documented exceptions;
 - entrypoints expose the same semantics;
 - repositories and adapters do not contain business policy;
 - public docs or help anchors are handled when user-visible;
@@ -118,8 +123,8 @@ Track each relevant artifact as `done`, `ready`, `blocked`, `not-applicable`, or
 4. Command/query/API contracts
 5. Workflow/event/error specs
 6. Public documentation or help outcome
-7. Test matrix or acceptance criteria
-8. Automated tests
+7. Test matrix rows with stable ids and automation levels
+8. Automated tests bound to matrix ids
 9. Code/read model/entrypoint implementation
 10. Post-Implementation Sync result
 
@@ -177,4 +182,5 @@ For formal work, report:
 - changed specs/code/tests/entrypoints;
 - verification commands;
 - remaining gaps;
+- test matrix ids and automated test bindings;
 - next recommended round.

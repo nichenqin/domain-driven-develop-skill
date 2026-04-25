@@ -10,6 +10,7 @@ Check that:
 - ADR/decision need was classified, and Code Round has no unresolved required decision records;
 - ubiquitous language has a canonical term map or the equivalent is clear from source-of-truth docs;
 - relevant command/query/API/workflow/error specs exist or are documented as not applicable;
+- changed behavior has stable test ids, automation levels, and automated test bindings or documented exceptions;
 - entrypoints are implemented or explicitly deferred;
 - tests cover the changed behavior at the right boundary;
 - public docs or help surfaces are handled when the behavior is user-visible;
@@ -27,6 +28,7 @@ Check that:
 - repositories load/persist and translate specs without business decisions;
 - adapters do not leak infrastructure types into domain/core;
 - expected domain failures return explicit errors or results.
+- tests prove the matrix row scenario they reference, not just nearby implementation details.
 
 ## Coherence
 
@@ -38,6 +40,7 @@ Check that:
 - source-of-truth docs and implementation do not contradict each other;
 - local specs do not override accepted decisions without a new decision record;
 - new specs update every visitor and test translation path;
+- changed matrix ids map to passing test names or metadata one-to-one, unless an explicit exception is recorded;
 - no service locator or container resolution appears outside composition code unless documented.
 
 ## Final Output

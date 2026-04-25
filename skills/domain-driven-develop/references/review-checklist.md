@@ -47,6 +47,8 @@ Use this checklist for domain-driven implementation reviews and before finalizin
 
 - Are expected failures explicit and structured?
 - Do error codes use canonical domain terms?
+- Does every changed test matrix row have a stable id, automation level, and automated test binding or documented exception?
 - Do tests name the behavior in the same language as specs and code?
+- Do test names or metadata include the matrix ids they prove?
 - Do tests cover the strongest observable boundary appropriate for the behavior?
 - Are migration gaps explicit instead of hidden in weakened specs?

@@ -68,6 +68,7 @@ skills/domain-driven-develop
 - Domain model source-of-truth binding.
 - ADR/decision-record gating for durable boundary, lifecycle, ownership, language, persistence, and public-contract choices.
 - Ubiquitous language alignment across docs, code, tests, events, errors, and entrypoints.
+- Testing/Test-First Round traceability with stable matrix ids, automation levels, and implementation test bindings.
 - Aggregate roots, value objects, domain services, repositories, application services, specifications, visitors, dependency injection, and inversion of control.
 - TypeScript examples with room for additional language references.
 
