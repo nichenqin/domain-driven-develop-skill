@@ -46,38 +46,54 @@ Keep these layers separate. This skill defines method and code shape. The projec
 
 ## Reference Map
 
-Load only the files needed for the current task:
+Load only the files needed for the current task. Keep reference files flat under `references/`
+so each file remains directly linked from this `SKILL.md`; use these groups to choose the
+right control plane before loading details.
+
+### Source Of Truth And Workflow Control
 
 - `references/project-source-of-truth.md`: read before non-trivial work to bind generic categories to project files.
 - `references/project-initialization.md`: read when the user asks to initialize a new product/project or the repository has no project-specific profile/domain docs yet.
 - `references/spec-driven-develop.md`: read for workflow control, round selection, readiness gates, and sync behavior.
-- `references/spec-plan-tasks-artifacts.md`: read when creating or using feature-level `spec.md`, `plan.md`, and `tasks.md` artifacts for new formal behavior.
 - `references/event-storming-discovery.md`: read during Discover Round when domain events, commands, actors, policies, aggregates, or ubiquitous language are not clear.
+- `references/next-behavior-selection.md`: read when choosing the next behavior after a behavior is implemented or mostly implemented.
 - `references/roadmap-and-versioning.md`: read when selecting the next behavior, checking release readiness, changing public surfaces, classifying compatibility impact, or applying SemVer.
 - `references/decisions-and-adrs.md`: read when deciding whether a behavior needs an ADR/decision record, or when changing boundaries, lifecycle, ownership, canonical language, persistence shape, or public contracts.
+
+### Round Artifacts And Synchronization
+
+- `references/spec-plan-tasks-artifacts.md`: read when creating or using feature-level `spec.md`, `plan.md`, and `tasks.md` artifacts for new formal behavior.
 - `references/round-artifacts.md`: read before non-trivial edits to build the behavior dossier, classify artifacts, and choose incremental or complete readiness.
 - `references/round-checklists.md`: read after the dossier exists and before editing files in a concrete round; contains minimum todo outcomes and synchronization surfaces.
 - `references/docs-round.md`: read when behavior changes user-visible language, input, output, status, recovery, workflows, or help surfaces.
 - `references/testing-traceability.md`: read when adding or changing behavior tests, test matrices, acceptance criteria, stable test ids, automation levels, or Code Round test bindings.
 - `references/reporting.md`: read for Discovery output, formal round summaries, artifact-state reports, coverage reports, and ready/not-ready reporting.
-- `references/next-behavior-selection.md`: read when choosing the next behavior after a behavior is implemented or mostly implemented.
-- `references/domain-events.md`: read when designing, emitting, consuming, publishing, projecting, replaying, backfilling, versioning, or testing domain/integration events.
-- `references/cqrs-with-ddd.md`: read when deciding whether CQRS is warranted, separating command/query flows, shaping read models, designing projections, or making consistency/event tradeoffs.
+- `references/verification.md`: read before finishing Code or Sync work.
+- `references/review-checklist.md`: read for domain-driven implementation review or before finalizing substantial changes.
+
+### Domain Modeling And Architecture Guardrails
+
 - `references/domain-modeling.md`: read when discovering bounded contexts, ubiquitous language, ownership, lifecycle, and whether DDD is warranted.
 - `references/context-boundaries.md`: read when bounded context, execution context, domain context, tracing, transactions, or i18n concerns are mixed.
 - `references/context-map-and-anticorruption.md`: read when a behavior crosses bounded contexts, teams, external systems, published languages, upstream/downstream relationships, or legacy models.
+- `references/domain-events.md`: read when designing, emitting, consuming, publishing, projecting, replaying, backfilling, versioning, or testing domain/integration events.
+- `references/cqrs-with-ddd.md`: read when deciding whether CQRS is warranted, separating command/query flows, shaping read models, designing projections, or making consistency/event tradeoffs.
 - `references/error-handling.md`: read when modeling expected domain/application failures, error taxonomy, adapter translation, or no-throw Result style.
 - `references/aggregate-root.md`: read when creating or changing aggregate roots, entities, invariants, state transitions, or domain events.
 - `references/value-object.md`: read when modeling IDs, names, statuses, money, addresses, timestamps, ranges, or other domain-significant values.
 - `references/domain-service.md`: read when a pure domain rule does not naturally belong to one aggregate or value object.
 - `references/repository.md`: read when designing repository ports, persistence adapters, read models, or selection/mutation boundaries.
 - `references/specification-and-visitor.md`: read when creating reusable business predicates, query/update specs, composite specs, SQL/API translation visitors, or avoiding `findBy...` repository proliferation.
+
+### Tactical Implementation Rules
+
 - `references/application-layer.md`: read when placing orchestration, command/query handlers, use cases, unit-of-work boundaries, event publication, and side effects.
 - `references/dependency-injection-ioc.md`: read when wiring dependencies, deciding constructor injection versus service locator, or keeping composition separate from use.
 - `references/language-typescript.md`: read when the target implementation uses TypeScript or when examples need a concrete language.
 - `references/tactical-typescript-project-structure.md`: read when initializing or restructuring a TypeScript DDD project, choosing package layout, creating aggregate/entity/value-object classes, repository ports, selection/mutation specifications, visitors, command/query application layers, or adapter boundaries.
-- `references/verification.md`: read before finishing Code or Sync work.
-- `references/review-checklist.md`: read for domain-driven implementation review or before finalizing substantial changes.
+
+### Calibration And Sources
+
 - `references/example-repositories.md`: read when concrete public examples would help calibrate tradeoffs.
 - `references/reading-list.md`: use for source links and conceptual grounding.
 
