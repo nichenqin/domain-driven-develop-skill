@@ -31,14 +31,14 @@ Work from facts to decisions:
 
 | Item | Question | Examples |
 | --- | --- | --- |
-| Domain event candidate | What happened in business language? | `DeploymentRequested`, `ResourceProvisioningFailed` |
-| Command | What intent caused it? | `create deployment`, `verify route` |
+| Domain event candidate | What happened in business language? | `OrderPlaced`, `PaymentAuthorizationFailed` |
+| Command | What intent caused it? | `place order`, `authorize payment` |
 | Actor | Who or what initiated the command? | user, CLI, scheduler, webhook |
-| Policy/rule | What rule reacts or blocks? | quota, readiness, ownership, compatibility |
-| Aggregate/resource | What owns the decision or state transition? | Deployment, Resource |
-| Read model | What must be observed afterward? | status timeline, diagnostic summary |
-| External system | What outside model participates? | provider API, VCS, payment system |
-| Open question | What is ambiguous? | owner, lifecycle stage, public term |
+| Policy/rule | What rule reacts or blocks? | payment limit, order status, ownership, compatibility |
+| Aggregate/resource | What owns the decision or state transition? | Order, Payment |
+| Read model | What must be observed afterward? | payment timeline, order summary |
+| External system | What outside model participates? | payment provider, tax service, fulfillment system |
+| Open question | What is ambiguous? | payment owner, lifecycle stage, public term |
 
 Prefer past-tense event names and the bounded context's own language.
 

@@ -117,6 +117,8 @@ right control plane before loading details.
 - Do not model domain-significant concepts as loose TypeScript interfaces, primitive aliases, or data bags when they have identity, invariants, lifecycle transitions, comparison, normalization, or behavior. Use classes for aggregate roots, entities, value objects, specifications, and domain services unless the project source of truth explicitly documents a different tactical style.
 - Do not put naked primitives such as `string`, `number`, `boolean`, string literal unions, or primitive arrays in aggregate/entity/value-object state for core domain concepts. Wrap them in value object classes or entities. Primitive values are allowed only inside value object internals, factory/rehydration inputs, serialization/DTO boundaries, tests, and explicitly non-domain plumbing such as error transport details.
 - Do not let aggregate roots, entities, or value objects become thin wrappers around primitives. They should expose intention-revealing behavior for domain questions, comparisons, transitions, and constrained changes.
+- Do not place value-object collaboration logic in helpers or domain services when the value objects are owned by one entity or aggregate root. If a calculation combines multiple owned value objects inside one entity, the entity owns that behavior. If a calculation coordinates multiple child entities or owned value objects inside one consistency boundary, the aggregate root owns that behavior.
+- Do not make domain services the primary home for intra-aggregate calculations. Domain services should call aggregate-root/entity/value-object methods and coordinate policies across already-loaded aggregate roots or genuinely cross-object rules; they should not repeatedly inspect child state that an aggregate root or entity can expose through domain methods.
 - Do not implement core domain decisions by peeling state with `toState().x.value` or equivalent primitive inspection. `toState()` belongs at serialization, persistence, read-model, logging, fixture, assertion, and adapter boundaries. Inside domain behavior, prefer methods such as `isActive()`, `appliesTo(...)`, `canTransitionTo(...)`, `increase(...)`, `decrease(...)`, `capAt(...)`, or aggregate-root operations named in ubiquitous language.
 - Do not move behavior into a domain service or helper merely to avoid adding methods to a value object, entity, or aggregate root. Use a domain service only when the rule genuinely spans multiple domain concepts or policies and cannot naturally live on one object.
 - Do not accept value-object or entity tests that only cover construction when new public domain behavior exists. Tests should cover exposed predicates, comparisons, transitions, clamping/capping behavior, and invalid transition results.
@@ -128,6 +130,110 @@ right control plane before loading details.
 - Do not start the next round while mandatory checklist items remain unchecked, unless each gap is moved to a documented later round, `not-applicable` state, or `deferred-gap`.
 - Do not bypass source-of-truth specs during Code Round. If the intended behavior is unclear, return to Spec Round.
 - Do not report completion without stating the active round, source-of-truth artifacts changed, verification performed, and deferred gaps.
+
+## Tactical Ownership Examples
+
+All generic TypeScript examples in this skill use an order/payment domain. Keep future examples in the same domain unless a project-specific profile supplies its own domain facts.
+
+Value objects must own local validation, comparison, state questions, and constrained arithmetic:
+
+```ts
+// Do.
+export class PaymentAmount {
+  private constructor(public readonly value: number) {}
+
+  static create(value: number): Result<PaymentAmount, DomainError> {
+    if (!Number.isInteger(value) || value < 0) {
+      return err(domainError.validation("payment_amount_invalid"));
+    }
+    return ok(new PaymentAmount(value));
+  }
+
+  static zero(): PaymentAmount {
+    return new PaymentAmount(0);
+  }
+
+  add(other: PaymentAmount): PaymentAmount {
+    return new PaymentAmount(this.value + other.value);
+  }
+
+  multiply(quantity: OrderLineQuantity): PaymentAmount {
+    return new PaymentAmount(this.value * quantity.value);
+  }
+
+  covers(total: PaymentAmount): boolean {
+    return this.value >= total.value;
+  }
+}
+
+// Avoid.
+if (payment.toState().amount.value >= order.toState().total.value) {
+  // payment decision by primitive peeling
+}
+```
+
+Entities must own calculations across their own value objects:
+
+```ts
+// Do.
+export class OrderLine extends Entity<OrderLineState, OrderLineId> {
+  lineTotal(): PaymentAmount {
+    return this.state.unitPrice.multiply(this.state.quantity);
+  }
+}
+
+// Avoid.
+const total = line.toState().unitPrice.value * line.toState().quantity.value;
+```
+
+Aggregate roots must coordinate child entities and owned value objects inside one consistency boundary:
+
+```ts
+// Do.
+export class Order extends AggregateRoot<OrderState, OrderId> {
+  payableAmount(): PaymentAmount {
+    return this.lines().reduce((sum, line) => sum.add(line.lineTotal()), PaymentAmount.zero());
+  }
+
+  authorizePayment(payment: Payment): Result<Order, DomainError> {
+    if (!payment.amount().covers(this.payableAmount())) {
+      return err(domainError.invariant("payment_amount_insufficient"));
+    }
+    return ok(new Order({ ...this.state, status: this.state.status.markPaid() }));
+  }
+}
+
+// Avoid.
+const total = order
+  .toState()
+  .lines.reduce((sum, line) => sum + line.unitPrice.value * line.quantity.value, 0);
+if (payment.toState().amount.value >= total) order.toState().status = OrderStatus.paid();
+```
+
+Domain services coordinate already-loaded aggregate roots or genuinely cross-owner policies. They should call aggregate/entity/value-object methods rather than own intra-aggregate calculations:
+
+```ts
+// Do.
+export class OrderPaymentPolicy {
+  authorize(order: Order, payment: Payment): Result<Order, DomainError> {
+    if (!order.canAcceptPayment()) return err(domainError.invariant("order_not_payable"));
+    return order.authorizePayment(payment);
+  }
+}
+
+// Avoid.
+export class OrderPaymentHelper {
+  authorize(order: Order, payment: Payment): Result<Order, DomainError> {
+    const total = order
+      .toState()
+      .lines.reduce((sum, line) => sum + line.unitPrice.value * line.quantity.value, 0);
+    if (payment.toState().amount.value < total) {
+      return err(domainError.invariant("payment_amount_insufficient"));
+    }
+    // service owns intra-aggregate calculation and transition
+  }
+}
+```
 
 ## Code Round Trigger
 

@@ -29,7 +29,7 @@ export class OrderId {
 
 Prefer class-based value objects over branded type aliases for domain-significant primitives. A branded alias may be acceptable at transport boundaries, but aggregate/entity state should use value object classes when the value has validation, normalization, comparison, units, ranges, or behavior.
 
-The private `unique symbol` field is intentional. It prevents two structurally identical classes such as `SpeciesId` and `MoveId` from being assignable to each other.
+The private `unique symbol` field is intentional. It prevents two structurally identical classes such as `OrderId` and `PaymentId` from being assignable to each other.
 
 Use this pattern for IDs and scalar value objects:
 
@@ -45,40 +45,40 @@ Use this pattern for IDs and scalar value objects:
 In TypeScript, primitives are acceptable at the edges of a value object, not as the aggregate/entity state model itself.
 
 ```ts
-export class NationalDexNumber extends ScalarValueObject<number> {
-  private [nationalDexNumberBrand]!: void;
+export class OrderLineQuantity extends ScalarValueObject<number> {
+  private [orderLineQuantityBrand]!: void;
 
   private constructor(value: number) {
     super(value);
   }
 
-  static create(value: number): Result<NationalDexNumber, DomainError> {
+  static create(value: number): Result<OrderLineQuantity, DomainError> {
     if (!Number.isInteger(value) || value < 1) {
-      return err(domainError.validation("national_dex_number_invalid"));
+      return err(domainError.validation("order_line_quantity_invalid"));
     }
-    return ok(new NationalDexNumber(value));
+    return ok(new OrderLineQuantity(value));
   }
 }
 ```
 
-Use raw `number` only inside `NationalDexNumber`, factory inputs, schema codecs, and serialization. Aggregate/entity state should refer to `NationalDexNumber`.
+Use raw `number` only inside `OrderLineQuantity`, factory inputs, schema codecs, and serialization. Aggregate/entity state should refer to `OrderLineQuantity`.
 
 Boolean policy flags also deserve value objects when they are domain language:
 
 ```ts
-export class ItemClausePolicy extends ScalarValueObject<boolean> {
-  private [itemClausePolicyBrand]!: void;
+export class PaymentCapturePolicy extends ScalarValueObject<boolean> {
+  private [paymentCapturePolicyBrand]!: void;
 
   private constructor(value: boolean) {
     super(value);
   }
 
-  static enabled(): ItemClausePolicy {
-    return new ItemClausePolicy(true);
+  static enabled(): PaymentCapturePolicy {
+    return new PaymentCapturePolicy(true);
   }
 
-  static disabled(): ItemClausePolicy {
-    return new ItemClausePolicy(false);
+  static disabled(): PaymentCapturePolicy {
+    return new PaymentCapturePolicy(false);
   }
 
   isEnabled(): boolean {
@@ -90,22 +90,22 @@ export class ItemClausePolicy extends ScalarValueObject<boolean> {
 Numeric value objects may contain domain operations:
 
 ```ts
-export class HP {
+export class PaymentAmount {
   private constructor(public readonly value: number) {}
 
-  static create(value: number): Result<HP, DomainError> {
-    if (!Number.isInteger(value) || value < 0) return err(domainError.validation("hp_invalid"));
-    return ok(new HP(value));
+  static create(value: number): Result<PaymentAmount, DomainError> {
+    if (!Number.isInteger(value) || value < 0) {
+      return err(domainError.validation("payment_amount_invalid"));
+    }
+    return ok(new PaymentAmount(value));
   }
 
-  decrease(amount: number): Result<HP, DomainError> {
-    if (!Number.isInteger(amount) || amount < 0) return err(domainError.validation("damage_invalid"));
-    return ok(new HP(Math.max(0, this.value - amount)));
+  add(other: PaymentAmount): PaymentAmount {
+    return new PaymentAmount(this.value + other.value);
   }
 
-  increase(amount: number, max: HP): Result<HP, DomainError> {
-    if (!Number.isInteger(amount) || amount < 0) return err(domainError.validation("healing_invalid"));
-    return ok(new HP(Math.min(max.value, this.value + amount)));
+  covers(total: PaymentAmount): boolean {
+    return this.value >= total.value;
   }
 }
 ```
@@ -113,13 +113,13 @@ export class HP {
 ## Result-Based Factories
 
 ```ts
-export class UserName {
+export class PaymentReference {
   private constructor(public readonly value: string) {}
 
-  static create(raw: string): Result<UserName, DomainError> {
-    const value = raw.trim();
-    if (value.length < 2) return err(domainError.validation("user_name_too_short"));
-    return ok(new UserName(value));
+  static create(raw: string): Result<PaymentReference, DomainError> {
+    const value = raw.trim().toLowerCase();
+    if (!value.startsWith("pay_")) return err(domainError.validation("payment_reference_invalid"));
+    return ok(new PaymentReference(value));
   }
 }
 ```
@@ -127,11 +127,12 @@ export class UserName {
 ## Discriminated Domain Events
 
 ```ts
-export type DomainEvent = UserRegisteredEvent | UserEmailVerifiedEvent;
+export type DomainEvent = OrderPlacedEvent | PaymentAuthorizedEvent;
 
-export interface UserRegisteredEvent {
-  type: "user.registered";
-  userId: UserId;
+export interface PaymentAuthorizedEvent {
+  type: "payment.authorized";
+  orderId: OrderId;
+  paymentId: PaymentId;
   occurredAt: OccurredAt;
 }
 ```
@@ -158,7 +159,7 @@ export interface OrderRepository {
 }
 ```
 
-Avoid repository method proliferation such as `findById`, `findByEmail`, `findActiveByOwner`, and `updateStatusById` unless the project has consciously chosen that style. Prefer selection and mutation specifications that adapters translate through visitors.
+Avoid repository method proliferation such as `findById`, `findByPaymentReference`, `findUnpaidByOwner`, and `updatePaymentStatusById` unless the project has consciously chosen that style. Prefer selection and mutation specifications that adapters translate through visitors.
 
 ## Language Expansion
 

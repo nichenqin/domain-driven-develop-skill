@@ -24,22 +24,22 @@ Avoid value objects for one-off local variables with no domain meaning.
 ## TypeScript Sketch
 
 ```ts
-const userEmailBrand: unique symbol = Symbol("UserEmail");
+const paymentReferenceBrand: unique symbol = Symbol("PaymentReference");
 
-export class UserEmail {
-  private [userEmailBrand]!: void;
+export class PaymentReference {
+  private [paymentReferenceBrand]!: void;
 
   private constructor(public readonly value: string) {}
 
-  static create(raw: string): Result<UserEmail, DomainError> {
+  static create(raw: string): Result<PaymentReference, DomainError> {
     const normalized = raw.trim().toLowerCase();
-    if (!normalized.includes("@")) {
-      return err(domainError.validation("user_email_invalid"));
+    if (!normalized.startsWith("pay_")) {
+      return err(domainError.validation("payment_reference_invalid"));
     }
-    return ok(new UserEmail(normalized));
+    return ok(new PaymentReference(normalized));
   }
 
-  equals(other: UserEmail): boolean {
+  equals(other: PaymentReference): boolean {
     return this.value === other.value;
   }
 }
@@ -50,16 +50,25 @@ export class UserEmail {
 Prefer this:
 
 ```ts
-export class DeploymentStatus {
-  private constructor(public readonly value: "planned" | "running" | "succeeded" | "failed") {}
+export class PaymentStatus {
+  private constructor(public readonly value: "pending" | "authorized" | "captured" | "failed") {}
 
-  static planned(): DeploymentStatus {
-    return new DeploymentStatus("planned");
+  static pending(): PaymentStatus {
+    return new PaymentStatus("pending");
   }
 
-  start(): Result<DeploymentStatus, DomainError> {
-    if (this.value !== "planned") return err(domainError.invariant("deployment_not_planned"));
-    return ok(new DeploymentStatus("running"));
+  authorize(): Result<PaymentStatus, DomainError> {
+    if (this.value !== "pending") return err(domainError.invariant("payment_not_pending"));
+    return ok(new PaymentStatus("authorized"));
+  }
+
+  isAuthorized(): boolean {
+    return this.value === "authorized";
+  }
+
+  capture(): Result<PaymentStatus, DomainError> {
+    if (!this.isAuthorized()) return err(domainError.invariant("payment_not_authorized"));
+    return ok(new PaymentStatus("captured"));
   }
 }
 ```
@@ -67,13 +76,13 @@ export class DeploymentStatus {
 Avoid this:
 
 ```ts
-if (deployment.status === "planned") deployment.status = "running";
+if (payment.status === "pending") payment.status = "authorized";
 ```
 
 Also avoid this inside domain behavior:
 
 ```ts
-if (deployment.toState().status.value === "running") {
+if (payment.toState().status.value === "authorized") {
   // domain decision outside the value object
 }
 ```
@@ -81,11 +90,11 @@ if (deployment.toState().status.value === "running") {
 Prefer intention-revealing predicates and transitions:
 
 ```ts
-if (deployment.status().isRunning()) {
+if (payment.status().isAuthorized()) {
   // caller asks a domain question
 }
 
-const nextStatus = deployment.status().succeed();
+const nextStatus = payment.status().capture();
 ```
 
 ## Behavioral Surface

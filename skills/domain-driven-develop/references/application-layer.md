@@ -41,43 +41,40 @@ Do not use command/query wrappers as ceremony around CRUD if read and write conc
 ## Command Handler Shape
 
 ```ts
-export class RegisterUserHandler implements CommandHandler<RegisterUserCommand> {
+export class AuthorizeOrderPaymentHandler implements CommandHandler<AuthorizeOrderPaymentCommand> {
   constructor(
-    private readonly users: UserRepository,
-    private readonly ids: IdGenerator,
+    private readonly orders: OrderRepository,
+    private readonly payments: PaymentRepository,
+    private readonly orderPaymentPolicy: OrderPaymentPolicy,
     private readonly clock: Clock,
   ) {}
 
-  async handle(command: RegisterUserCommand): Promise<Result<UserId, DomainError>> {
-    const nameResult = UserName.create(command.name);
-    if (nameResult.isErr()) return err(nameResult.error);
-
-    const emailResult = UserEmail.create(command.email);
-    if (emailResult.isErr()) return err(emailResult.error);
-
-    const existingResult = await this.users.findOne(
+  async handle(command: AuthorizeOrderPaymentCommand): Promise<Result<OrderId, DomainError>> {
+    const orderResult = await this.orders.findOne(
       command.context,
-      UserLookupSpec.byNameOrEmail(nameResult.value, emailResult.value),
+      OrderByIdSpec.create(command.orderId),
     );
-    if (existingResult.isErr()) return err(existingResult.error);
-    if (existingResult.value) return err(domainError.conflict("user_already_exists"));
+    if (orderResult.isErr()) return err(orderResult.error);
+    if (!orderResult.value) return err(domainError.notFound("order_not_found"));
 
-    const userResult = User.register({
-      id: this.ids.next("user"),
-      name: nameResult.value,
-      email: emailResult.value,
-      at: this.clock.now(),
-    });
-    if (userResult.isErr()) return err(userResult.error);
-
-    const saveResult = await this.users.upsert(
+    const paymentResult = await this.payments.findOne(
       command.context,
-      userResult.value,
-      UpsertUserSpec.fromUser(userResult.value),
+      PaymentByIdSpec.create(command.paymentId),
+    );
+    if (paymentResult.isErr()) return err(paymentResult.error);
+    if (!paymentResult.value) return err(domainError.notFound("payment_not_found"));
+
+    const authorized = this.orderPaymentPolicy.authorize(orderResult.value, paymentResult.value);
+    if (authorized.isErr()) return err(authorized.error);
+
+    const saveResult = await this.orders.upsert(
+      command.context,
+      authorized.value,
+      UpsertOrderSpec.fromOrder(authorized.value, this.clock.now()),
     );
     if (saveResult.isErr()) return err(saveResult.error);
 
-    return ok(userResult.value.toState().id);
+    return ok(authorized.value.id());
   }
 }
 ```

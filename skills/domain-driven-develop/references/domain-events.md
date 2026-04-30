@@ -33,15 +33,15 @@ Avoid an event when:
 
 Events should be named as past-tense facts:
 
-- `DeploymentPlanned`
-- `ResourceProvisioningFailed`
-- `UserEmailVerified`
+- `OrderPlaced`
+- `PaymentAuthorized`
+- `PaymentAuthorizationFailed`
 
 Avoid command-shaped or CRUD-shaped event names:
 
-- `PlanDeployment`
-- `UpdateDeployment`
-- `DeploymentChanged`
+- `PlaceOrder`
+- `UpdatePayment`
+- `PaymentChanged`
 
 Payload rules:
 

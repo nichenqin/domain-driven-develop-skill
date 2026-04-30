@@ -8,11 +8,11 @@ A bounded context is a business-model boundary. It owns language, concepts, and 
 
 Examples:
 
-- billing;
-- catalog;
-- identity;
-- deployment;
-- workspace.
+- ordering;
+- payments;
+- invoicing;
+- fulfillment;
+- refunds.
 
 It is not a request metadata object.
 
@@ -36,8 +36,8 @@ Sometimes domain behavior needs runtime-derived policy. Pass only the narrowed v
 
 ```ts
 type DomainContext = {
-  maxMembersPerTeam: number;
-  namingPolicy: NamingPolicy;
+  maxPaymentAttempts: PaymentAttemptLimit;
+  captureWindow: PaymentCaptureWindow;
 };
 ```
 

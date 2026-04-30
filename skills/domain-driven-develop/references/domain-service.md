@@ -17,6 +17,8 @@ Before creating or expanding a domain service, ask whether the behavior belongs 
 
 - a status question usually belongs on the status value object;
 - a constrained numeric change usually belongs on the numeric value object;
+- a calculation that combines multiple value objects owned by one entity usually belongs on that entity;
+- a calculation or invariant that coordinates multiple child entities or owned value objects inside one consistency boundary usually belongs on the aggregate root;
 - a child-entity mutation usually belongs behind aggregate behavior;
 - an invariant on one consistency boundary usually belongs on the aggregate root.
 
@@ -28,20 +30,21 @@ Do not use a domain service for:
 - command handling;
 - object construction that belongs in an aggregate factory;
 - business-light helper functions;
+- intra-aggregate calculations that an aggregate root or entity can own;
 - rules that only inspect one object's serialized state;
 - code that repeatedly peels `toState().x.value` because the model is missing intention-revealing methods.
 
 ## TypeScript Sketch
 
 ```ts
-export class PricingPolicy {
-  calculateDiscount(customer: Customer, order: Order): Result<Money, DomainError> {
-    if (!customer.isActive()) return ok(Money.zero(order.currency()));
-    if (!order.total().greaterThan(Money.of(1000, order.currency()))) {
-      return ok(Money.zero(order.currency()));
+export class OrderPaymentPolicy {
+  authorize(order: Order, payment: Payment): Result<Order, DomainError> {
+    if (!order.canAcceptPayment()) return err(domainError.invariant("order_not_payable"));
+    if (!payment.amount().covers(order.payableAmount())) {
+      return err(domainError.invariant("payment_amount_insufficient"));
     }
 
-    return ok(order.total().multiply(0.05));
+    return order.authorizePayment(payment);
   }
 }
 ```
@@ -49,18 +52,20 @@ export class PricingPolicy {
 The application service can load the objects and call the domain service:
 
 ```ts
-const customer = await customers.findOne(context, CustomerByIdSpec.create(customerId));
 const order = await orders.findOne(context, OrderByIdSpec.create(orderId));
-const discount = pricingPolicy.calculateDiscount(customer, order);
+const payment = await payments.findOne(context, PaymentByIdSpec.create(paymentId));
+const authorizedOrder = orderPaymentPolicy.authorize(order, payment);
 ```
 
-The domain service should not load the customer or order itself.
+The domain service should not load the order or payment itself.
+
+The domain service should also avoid reimplementing behavior already owned by the aggregate roots. It should compose methods such as `order.payableAmount()`, `order.canAcceptPayment()`, or `payment.amount().covers(...)` rather than peeling internal state and duplicating those calculations.
 
 ## Naming
 
 Name domain services after domain policy, not technical role:
 
-- good: `PricingPolicy`, `RouteEligibilityPolicy`, `CreditLimitPolicy`
-- weak: `OrderHelper`, `UserManager`, `DomainService`
+- good: `OrderPaymentPolicy`, `RefundEligibilityPolicy`, `PaymentCapturePolicy`
+- weak: `OrderHelper`, `PaymentManager`, `DomainService`
 
 If the name has no ubiquitous-language meaning, the logic probably belongs somewhere else.

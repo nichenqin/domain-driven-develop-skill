@@ -36,54 +36,57 @@ Prefer another construct when:
 Prefer composable specs and named presets over repository business methods.
 
 ```ts
-export interface UserSelectionSpec {
-  isSatisfiedBy(candidate: User): boolean;
-  accept<TResult>(visitor: UserSelectionSpecVisitor<TResult>): TResult;
+export interface OrderSelectionSpec {
+  isSatisfiedBy(candidate: Order): boolean;
+  accept<TResult>(visitor: OrderSelectionSpecVisitor<TResult>): TResult;
 
-  and(other: UserSelectionSpec): UserSelectionSpec;
-  or(other: UserSelectionSpec): UserSelectionSpec;
-  not(): UserSelectionSpec;
+  and(other: OrderSelectionSpec): OrderSelectionSpec;
+  or(other: OrderSelectionSpec): OrderSelectionSpec;
+  not(): OrderSelectionSpec;
 }
 
-export class UserNameSpec extends BaseUserSelectionSpec {
-  private constructor(public readonly name: UserName) {
+export class OrderNumberSpec extends BaseOrderSelectionSpec {
+  private constructor(public readonly orderNumber: OrderNumber) {
     super();
   }
 
-  static create(name: UserName): UserNameSpec {
-    return new UserNameSpec(name);
+  static create(orderNumber: OrderNumber): OrderNumberSpec {
+    return new OrderNumberSpec(orderNumber);
   }
 
-  isSatisfiedBy(candidate: User): boolean {
-    return candidate.toState().name.equals(this.name);
+  isSatisfiedBy(candidate: Order): boolean {
+    return candidate.orderNumber().equals(this.orderNumber);
   }
 
-  accept<TResult>(visitor: UserSelectionSpecVisitor<TResult>): TResult {
-    return visitor.visitUserName(this);
+  accept<TResult>(visitor: OrderSelectionSpecVisitor<TResult>): TResult {
+    return visitor.visitOrderNumber(this);
   }
 }
 
-export class UserEmailSpec extends BaseUserSelectionSpec {
-  private constructor(public readonly email: UserEmail) {
+export class PaymentReferenceSpec extends BaseOrderSelectionSpec {
+  private constructor(public readonly paymentReference: PaymentReference) {
     super();
   }
 
-  static create(email: UserEmail): UserEmailSpec {
-    return new UserEmailSpec(email);
+  static create(paymentReference: PaymentReference): PaymentReferenceSpec {
+    return new PaymentReferenceSpec(paymentReference);
   }
 
-  isSatisfiedBy(candidate: User): boolean {
-    return candidate.toState().email.equals(this.email);
+  isSatisfiedBy(candidate: Order): boolean {
+    return candidate.hasPaymentReference(this.paymentReference);
   }
 
-  accept<TResult>(visitor: UserSelectionSpecVisitor<TResult>): TResult {
-    return visitor.visitUserEmail(this);
+  accept<TResult>(visitor: OrderSelectionSpecVisitor<TResult>): TResult {
+    return visitor.visitPaymentReference(this);
   }
 }
 
-export class UserLookupSpec {
-  static byNameOrEmail(name: UserName, email: UserEmail): UserSelectionSpec {
-    return UserNameSpec.create(name).or(UserEmailSpec.create(email));
+export class OrderLookupSpec {
+  static byOrderNumberOrPaymentReference(
+    orderNumber: OrderNumber,
+    paymentReference: PaymentReference,
+  ): OrderSelectionSpec {
+    return OrderNumberSpec.create(orderNumber).or(PaymentReferenceSpec.create(paymentReference));
   }
 }
 ```
@@ -91,39 +94,42 @@ export class UserLookupSpec {
 This keeps business language in the domain/application boundary:
 
 ```ts
-const user = await users.findOne(context, UserLookupSpec.byNameOrEmail(name, email));
+const order = await orders.findOne(
+  context,
+  OrderLookupSpec.byOrderNumberOrPaymentReference(orderNumber, paymentReference),
+);
 ```
 
 Avoid:
 
 ```ts
-users.findByUserNameOrEmail(name.value, email.value);
+orders.findByOrderNumberOrPaymentReference(orderNumber.value, paymentReference.value);
 ```
 
-The repository should not need to understand that "name or email" is a business lookup rule. It should translate the spec it receives.
+The repository should not need to understand that "order number or payment reference" is a business lookup rule. It should translate the spec it receives.
 
 ## Builder With Explicit Grouping
 
 When a spec tree becomes non-trivial, use a builder or preset factory so grouping is impossible to misread.
 
 ```ts
-const spec = UserSpecs.create()
-  .inOrganization(organizationId)
+const spec = OrderSpecs.create()
+  .inPaymentStatus(PaymentStatus.pending())
   .andGroup((group) =>
     group
-      .withStatus(UserStatus.active())
+      .withCaptureWindow(PaymentCaptureWindow.open())
       .or()
-      .withStatus(UserStatus.invited()),
+      .withPaymentRetryAllowed(),
   )
-  .not((group) => group.withRole(UserRole.suspended()))
+  .not((group) => group.withPaymentStatus(PaymentStatus.captured()))
   .build();
 ```
 
 The intent is:
 
-- organization matches;
-- and status is active or invited;
-- and role is not suspended.
+- payment status is pending;
+- and capture window is open or retry is allowed;
+- and payment is not already captured.
 
 Avoid mixing raw `and` and `or` calls where precedence is unclear.
 
@@ -136,38 +142,38 @@ The visitor pattern inverts translation control:
 - the domain never imports the database/query-builder package.
 
 ```ts
-export interface UserSelectionSpecVisitor<TResult> {
-  visitUserName(spec: UserNameSpec): TResult;
-  visitUserEmail(spec: UserEmailSpec): TResult;
-  visitAnd(spec: AndUserSpec): TResult;
-  visitOr(spec: OrUserSpec): TResult;
-  visitNot(spec: NotUserSpec): TResult;
+export interface OrderSelectionSpecVisitor<TResult> {
+  visitOrderNumber(spec: OrderNumberSpec): TResult;
+  visitPaymentReference(spec: PaymentReferenceSpec): TResult;
+  visitAnd(spec: AndOrderSpec): TResult;
+  visitOr(spec: OrOrderSpec): TResult;
+  visitNot(spec: NotOrderSpec): TResult;
 }
 ```
 
 For SQL builders, let the visitor return a predicate rather than mutating domain state:
 
 ```ts
-type SqlPredicate = (builder: ExpressionBuilder<Database, "users">) => Expression<boolean>;
+type SqlPredicate = (builder: ExpressionBuilder<Database, "orders">) => Expression<boolean>;
 
-class KyselyUserSelectionVisitor implements UserSelectionSpecVisitor<SqlPredicate> {
-  visitUserName(spec: UserNameSpec): SqlPredicate {
-    return (eb) => eb("name", "=", spec.name.value);
+class KyselyOrderSelectionVisitor implements OrderSelectionSpecVisitor<SqlPredicate> {
+  visitOrderNumber(spec: OrderNumberSpec): SqlPredicate {
+    return (eb) => eb("order_number", "=", spec.orderNumber.value);
   }
 
-  visitUserEmail(spec: UserEmailSpec): SqlPredicate {
-    return (eb) => eb("email", "=", spec.email.value);
+  visitPaymentReference(spec: PaymentReferenceSpec): SqlPredicate {
+    return (eb) => eb("payment_reference", "=", spec.paymentReference.value);
   }
 
-  visitOr(spec: OrUserSpec): SqlPredicate {
+  visitOr(spec: OrOrderSpec): SqlPredicate {
     return (eb) => eb.or([spec.left.accept(this)(eb), spec.right.accept(this)(eb)]);
   }
 
-  visitAnd(spec: AndUserSpec): SqlPredicate {
+  visitAnd(spec: AndOrderSpec): SqlPredicate {
     return (eb) => eb.and([spec.left.accept(this)(eb), spec.right.accept(this)(eb)]);
   }
 
-  visitNot(spec: NotUserSpec): SqlPredicate {
+  visitNot(spec: NotOrderSpec): SqlPredicate {
     return (eb) => eb.not(spec.inner.accept(this)(eb));
   }
 }
@@ -176,8 +182,8 @@ class KyselyUserSelectionVisitor implements UserSelectionSpecVisitor<SqlPredicat
 The repository applies the translated predicate:
 
 ```ts
-const predicate = spec.accept(new KyselyUserSelectionVisitor());
-const row = await db.selectFrom("users").selectAll().where(predicate).executeTakeFirst();
+const predicate = spec.accept(new KyselyOrderSelectionVisitor());
+const row = await db.selectFrom("orders").selectAll().where(predicate).executeTakeFirst();
 ```
 
 ## Mutation Specs
@@ -185,19 +191,19 @@ const row = await db.selectFrom("users").selectAll().where(predicate).executeTak
 Use separate mutation specs when persistence needs explicit update/upsert translation.
 
 ```ts
-export interface UserMutationSpecVisitor<TResult> {
-  visitUpsertUser(spec: UpsertUserSpec): TResult;
+export interface OrderMutationSpecVisitor<TResult> {
+  visitUpsertOrder(spec: UpsertOrderSpec): TResult;
 }
 
-export class UpsertUserSpec {
-  private constructor(public readonly state: UserState) {}
+export class UpsertOrderSpec {
+  private constructor(public readonly state: OrderState) {}
 
-  static fromUser(user: User): UpsertUserSpec {
-    return new UpsertUserSpec(user.toState());
+  static fromOrder(order: Order): UpsertOrderSpec {
+    return new UpsertOrderSpec(order.toState());
   }
 
-  accept<TResult>(visitor: UserMutationSpecVisitor<TResult>): TResult {
-    return visitor.visitUpsertUser(this);
+  accept<TResult>(visitor: OrderMutationSpecVisitor<TResult>): TResult {
+    return visitor.visitUpsertOrder(this);
   }
 }
 ```
@@ -215,21 +221,19 @@ interface MutationAwareSpec<TAggregate, TVisitor> {
   accept<TResult>(visitor: TVisitor): TResult;
 }
 
-class NormalizeUserEmailSpec implements MutationAwareSpec<User, UserMutationSpecVisitor> {
-  constructor(private readonly rawEmail: string) {}
+class CaptureAuthorizedPaymentSpec implements MutationAwareSpec<Order, OrderMutationSpecVisitor> {
+  constructor(private readonly capturedAt: OccurredAt) {}
 
-  isSatisfiedBy(user: User): boolean {
-    return user.toState().email.value !== this.rawEmail.trim().toLowerCase();
+  isSatisfiedBy(order: Order): boolean {
+    return order.paymentStatus().isAuthorized();
   }
 
-  mutate(user: User): Result<User, DomainError> {
-    const email = UserEmail.create(this.rawEmail);
-    if (email.isErr()) return err(email.error);
-    return user.changeEmail(email.value);
+  mutate(order: Order): Result<Order, DomainError> {
+    return order.capturePayment(this.capturedAt);
   }
 
-  accept<TResult>(visitor: UserMutationSpecVisitor<TResult>): TResult {
-    return visitor.visitNormalizeUserEmail(this);
+  accept<TResult>(visitor: OrderMutationSpecVisitor<TResult>): TResult {
+    return visitor.visitCaptureAuthorizedPayment(this);
   }
 }
 ```

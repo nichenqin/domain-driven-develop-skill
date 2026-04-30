@@ -55,16 +55,18 @@ export const domainError = {
 ## Value Object Factory
 
 ```ts
-class UserEmail {
+class PaymentReference {
   private constructor(public readonly value: string) {}
 
-  static create(raw: unknown): Result<UserEmail, DomainError> {
-    if (typeof raw !== "string") return err(domainError.validation("user_email_required"));
+  static create(raw: unknown): Result<PaymentReference, DomainError> {
+    if (typeof raw !== "string") return err(domainError.validation("payment_reference_required"));
 
     const normalized = raw.trim().toLowerCase();
-    if (!normalized.includes("@")) return err(domainError.validation("user_email_invalid"));
+    if (!normalized.startsWith("pay_")) {
+      return err(domainError.validation("payment_reference_invalid"));
+    }
 
-    return ok(new UserEmail(normalized));
+    return ok(new PaymentReference(normalized));
   }
 }
 ```
@@ -74,23 +76,25 @@ class UserEmail {
 Validate transport-shaped input before creating a command object:
 
 ```ts
-class RegisterUserCommand {
+class AuthorizeOrderPaymentCommand {
   private constructor(
-    readonly name: UserName,
-    readonly email: UserEmail,
+    readonly orderId: OrderId,
+    readonly paymentReference: PaymentReference,
   ) {}
 
-  static create(raw: unknown): Result<RegisterUserCommand, DomainError> {
-    const parsed = registerUserSchema.safeParse(raw);
-    if (!parsed.success) return err(domainError.validation("register_user_input_invalid"));
+  static create(raw: unknown): Result<AuthorizeOrderPaymentCommand, DomainError> {
+    const parsed = authorizeOrderPaymentSchema.safeParse(raw);
+    if (!parsed.success) {
+      return err(domainError.validation("authorize_order_payment_input_invalid"));
+    }
 
-    const name = UserName.create(parsed.data.name);
-    if (name.isErr()) return err(name.error);
+    const orderId = OrderId.create(parsed.data.orderId);
+    if (orderId.isErr()) return err(orderId.error);
 
-    const email = UserEmail.create(parsed.data.email);
-    if (email.isErr()) return err(email.error);
+    const paymentReference = PaymentReference.create(parsed.data.paymentReference);
+    if (paymentReference.isErr()) return err(paymentReference.error);
 
-    return ok(new RegisterUserCommand(name.value, email.value));
+    return ok(new AuthorizeOrderPaymentCommand(orderId.value, paymentReference.value));
   }
 }
 ```

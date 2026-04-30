@@ -82,29 +82,29 @@ Value objects should validate and normalize through factories, expose serializat
 
 Examples:
 
-- `HP.increase(amount): Result<HP>`
-- `HP.decrease(amount): Result<HP>`
-- `Level.normalizeForRuleset(level): Result<Level>`
-- `PokemonType.equals(other): boolean`
+- `PaymentAmount.add(other): PaymentAmount`
+- `PaymentAmount.covers(total): boolean`
+- `PaymentStatus.authorize(): Result<PaymentStatus>`
+- `OrderNumber.equals(other): boolean`
 
 Use private constructors plus `create(...)` and `rehydrate(...)` when persistence needs trusted reconstruction.
 
 For TypeScript nominal safety, add a private `unique symbol` brand field to value object and identifier classes when structurally identical classes could otherwise be assigned to each other:
 
 ```ts
-const speciesIdBrand: unique symbol = Symbol("SpeciesId");
+const paymentIdBrand: unique symbol = Symbol("PaymentId");
 
-export class SpeciesId extends ScalarValueObject<string> {
-  private [speciesIdBrand]!: void;
+export class PaymentId extends ScalarValueObject<string> {
+  private [paymentIdBrand]!: void;
 
   private constructor(value: string) {
     super(value);
   }
 
-  static create(raw: string): Result<SpeciesId, DomainError> {
+  static create(raw: string): Result<PaymentId, DomainError> {
     const value = raw.trim();
-    if (!value) return err(domainError.validation("species_id_required"));
-    return ok(new SpeciesId(value));
+    if (!value.startsWith("pay_")) return err(domainError.validation("payment_id_invalid"));
+    return ok(new PaymentId(value));
   }
 }
 ```
@@ -117,17 +117,17 @@ Core domain aggregate/entity/value-object state should not expose naked primitiv
 
 ```ts
 // Avoid in core domain state.
-export interface PokemonSpeciesState {
-  readonly name: string;
-  readonly nationalDexNumber: number;
-  readonly tags: readonly string[];
+export interface OrderState {
+  readonly orderNumber: string;
+  readonly totalCents: number;
+  readonly paymentStatus: "pending" | "authorized" | "captured";
 }
 
 // Prefer.
-export interface PokemonSpeciesState {
-  readonly name: PokemonSpeciesName;
-  readonly nationalDexNumber: NationalDexNumber;
-  readonly tags: readonly CatalogTag[];
+export interface OrderState {
+  readonly orderNumber: OrderNumber;
+  readonly payableAmount: PaymentAmount;
+  readonly paymentStatus: PaymentStatus;
 }
 ```
 
@@ -154,10 +154,10 @@ If a value has no invariant today, still create a small value object when it is 
 Prefer repository ports shaped around aggregate roots and specifications:
 
 ```ts
-export interface TeamRepository {
-  findOne(context: RepositoryContext, spec: TeamSelectionSpec): Promise<Result<Team | null, DomainError>>;
-  upsert(context: RepositoryContext, team: Team, spec: TeamMutationSpec): Promise<Result<void, DomainError>>;
-  deleteOne(context: RepositoryContext, spec: TeamSelectionSpec): Promise<Result<boolean, DomainError>>;
+export interface OrderRepository {
+  findOne(context: RepositoryContext, spec: OrderSelectionSpec): Promise<Result<Order | null, DomainError>>;
+  upsert(context: RepositoryContext, order: Order, spec: OrderMutationSpec): Promise<Result<void, DomainError>>;
+  deleteOne(context: RepositoryContext, spec: OrderSelectionSpec): Promise<Result<boolean, DomainError>>;
 }
 ```
 
@@ -169,12 +169,12 @@ Selection and mutation specs belong in `core` when they express domain language 
 
 Required pattern:
 
-- `TeamSelectionSpec`
-- `TeamSelectionSpecVisitor<TResult>`
-- `TeamByIdSpec`
-- `TeamMutationSpec`
-- `TeamMutationSpecVisitor<TResult>`
-- `UpsertTeamSpec`
+- `OrderSelectionSpec`
+- `OrderSelectionSpecVisitor<TResult>`
+- `OrderByIdSpec`
+- `OrderMutationSpec`
+- `OrderMutationSpecVisitor<TResult>`
+- `UpsertOrderSpec`
 
 When adding a spec, update every visitor and add tests for in-memory satisfaction and adapter translation when an adapter exists.
 
@@ -182,9 +182,9 @@ When adding a spec, update every visitor and add tests for in-memory satisfactio
 
 Application behavior should enter through explicit messages:
 
-- `ValidateTeamCommand`
-- `ImportCatalogCommand`
-- `GetPokemonSpeciesQuery`
+- `PlaceOrderCommand`
+- `AuthorizeOrderPaymentCommand`
+- `GetOrderPaymentQuery`
 
 Handlers parse validated input, load repositories/read models through ports, call aggregate/value-object/domain-service behavior, persist through repositories, publish events after persistence when applicable, and return read models or structured results.
 
