@@ -32,15 +32,18 @@ Check that:
 - aggregate boundaries match project source-of-truth docs;
 - external, vendor, legacy, or upstream models are translated at boundaries and do not leak into aggregate state;
 - value objects protect domain-significant values;
+- value objects, entities, and aggregate roots expose behavior for domain questions and constrained changes instead of forcing callers to peel `toState().x.value`;
 - aggregate methods enforce transitions and invariants;
 - application services orchestrate without hiding domain policy;
+- domain services coordinate genuine cross-concept rules and do not act as dumping grounds for behavior that belongs on one value object, entity, or aggregate;
 - command handlers coordinate write-side decisions without hiding invariants in buses, controllers, or repositories;
 - query handlers return read-optimized models without mutating business state;
 - event handlers do not own the original write-side decision or bypass aggregate invariants;
 - repositories load/persist and translate specs without business decisions;
 - adapters do not leak infrastructure types into domain/core;
 - expected domain failures return explicit errors or results.
-- tests prove the matrix row scenario they reference, not just nearby implementation details.
+- tests prove the matrix row scenario they reference, not just nearby implementation details;
+- tests cover newly exposed value-object/entity/aggregate behavior, not only construction and rehydration.
 
 ## Coherence
 

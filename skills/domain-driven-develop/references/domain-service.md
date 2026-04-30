@@ -13,6 +13,13 @@ Use a domain service when:
 - the rule can be evaluated with already-loaded domain objects or explicit domain values;
 - putting it in an application service would hide domain truth.
 
+Before creating or expanding a domain service, ask whether the behavior belongs on an existing aggregate, entity, or value object:
+
+- a status question usually belongs on the status value object;
+- a constrained numeric change usually belongs on the numeric value object;
+- a child-entity mutation usually belongs behind aggregate behavior;
+- an invariant on one consistency boundary usually belongs on the aggregate root.
+
 Do not use a domain service for:
 
 - database queries;
@@ -20,7 +27,9 @@ Do not use a domain service for:
 - transaction management;
 - command handling;
 - object construction that belongs in an aggregate factory;
-- business-light helper functions.
+- business-light helper functions;
+- rules that only inspect one object's serialized state;
+- code that repeatedly peels `toState().x.value` because the model is missing intention-revealing methods.
 
 ## TypeScript Sketch
 

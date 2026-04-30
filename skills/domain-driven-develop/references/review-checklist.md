@@ -16,14 +16,17 @@ Use this checklist for domain-driven implementation reviews and before finalizin
 - Are aggregate boundaries driven by invariants and consistency, not tables or screens?
 - Are entities identity-bearing and value objects immutable?
 - Are domain-significant primitives wrapped in value objects?
+- Do value objects expose predicates, comparisons, transitions, and constrained changes needed by callers?
 - Are status transitions represented by behavior or state-machine value objects?
 - Are invalid states hard to represent?
+- Is domain behavior avoiding `toState().x.value` primitive inspection except at serialization, persistence, read-model, fixture, assertion, or adapter boundaries?
 
 ## Placement
 
 - Are aggregate invariants inside aggregate behavior?
 - Is cross-aggregate orchestration in application services?
 - Are pure cross-concept domain rules in domain services when they do not fit one aggregate?
+- Are domain services free of rules that naturally belong on one value object, entity, or aggregate?
 - Are adapters limited to translation and side effects?
 - Are tracing, transactions, request metadata, and framework objects kept out of aggregates and value objects?
 
@@ -57,4 +60,5 @@ Use this checklist for domain-driven implementation reviews and before finalizin
 - Do tests name the behavior in the same language as specs and code?
 - Do test names or metadata include the matrix ids they prove?
 - Do tests cover the strongest observable boundary appropriate for the behavior?
+- Do value-object/entity/aggregate tests cover public behavior, not only `create`, `rehydrate`, and `equals`?
 - Are migration gaps explicit instead of hidden in weakened specs?
