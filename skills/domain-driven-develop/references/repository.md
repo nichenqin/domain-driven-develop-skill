@@ -8,6 +8,19 @@ A repository is a collection-like port for aggregate roots or application-owned 
 
 Keep repository implementations in adapters or infrastructure. Keep repository interfaces in the domain or application boundary, depending on the project architecture.
 
+## Spec Repository Constraint
+
+Treat spec-based repository APIs as a strong architectural constraint, not a style preference. The repository surface should stay small and collection-shaped; business lookup and mutation language belongs in named specs and aggregate/application methods.
+
+Prefer:
+
+- `findOne(context, spec)` over `findById`, `findByRequestId`, `findByOwnerAndStatus`, or similar method growth;
+- `findMany(context, spec)` over one repository method per list screen or report filter;
+- `upsert(context, aggregate, mutationSpec)` or `update(context, selectionSpec, mutationSpec)` over adapter-owned business mutations such as `markPaymentAuthorized`;
+- composed specs over repository methods that encode `and`/`or` business language in their names.
+
+A spec is not a persistence filter bag. It is a named domain predicate or mutation intent. Spec composition represents business logic; the repository adapter only translates that logic to storage operations.
+
 ## Preferred Shape
 
 ```ts
@@ -86,4 +99,5 @@ Persistence adapters must not:
 - decide whether a domain transition is allowed;
 - call provider SDKs from domain specifications;
 - inspect ad-hoc request DTOs as business policy;
+- add business-specific `findBy...` or `mark...` methods to avoid modeling a spec;
 - scatter `instanceof` checks that throw on unknown specs when the spec has a visitor contract.
