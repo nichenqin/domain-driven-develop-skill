@@ -8,6 +8,8 @@ A specification is a named business predicate or mutation intent. It should be r
 
 Specifications are part of the domain model. A single spec captures one meaningful business rule, and composed specs capture larger business logic. Do not reduce specs to transport DTOs or optional persistence filter bags.
 
+Avoid "god specs" that collect many optional parameters into one object. If a lookup can be narrowed by request id, resource id, hostname, and path, model those as separate specs and compose them. The composition is the business logic; a visitor translates the resulting spec tree.
+
 Use a specification when:
 
 - the same rule gates multiple use cases;

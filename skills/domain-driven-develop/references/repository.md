@@ -19,7 +19,7 @@ Prefer:
 - `upsert(context, aggregate, mutationSpec)` or `update(context, selectionSpec, mutationSpec)` over adapter-owned business mutations such as `markPaymentAuthorized`;
 - composed specs over repository methods that encode `and`/`or` business language in their names.
 
-A spec is not a persistence filter bag. It is a named domain predicate or mutation intent. Spec composition represents business logic; the repository adapter only translates that logic to storage operations.
+A spec is not a persistence filter bag. It is a named domain predicate or mutation intent. Spec composition represents business logic; the repository adapter only translates that logic to storage operations. Do not replace `findBy...` proliferation with one optional-parameter spec object such as `LookupSpec({ requestId, resourceId?, hostname?, path? })`; compose `ByRequestIdSpec.and(ByResourceIdSpec).and(ByHostnameSpec)` and translate that tree with a visitor.
 
 ## Preferred Shape
 
