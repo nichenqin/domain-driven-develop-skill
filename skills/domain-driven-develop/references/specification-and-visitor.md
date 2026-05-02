@@ -6,6 +6,10 @@ Use this reference when creating reusable business predicates, selection specs, 
 
 A specification is a named business predicate or mutation intent. It should be reusable, composable, testable, and expressed in domain language.
 
+Specifications are part of the domain model. A single spec captures one meaningful business rule, and composed specs capture larger business logic. Do not reduce specs to transport DTOs or optional persistence filter bags.
+
+Avoid "god specs" that collect many optional parameters into one object. If a lookup can be narrowed by request id, resource id, hostname, and path, model those as separate specs and compose them. The composition is the business logic; a visitor translates the resulting spec tree.
+
 Use a specification when:
 
 - the same rule gates multiple use cases;
@@ -107,6 +111,8 @@ orders.findByOrderNumberOrPaymentReference(orderNumber.value, paymentReference.v
 ```
 
 The repository should not need to understand that "order number or payment reference" is a business lookup rule. It should translate the spec it receives.
+
+Composition is business language. If `A.or(B).and(C)` has a domain meaning, name the preset or builder method so application services can select the rule without explaining storage details.
 
 ## Builder With Explicit Grouping
 
@@ -236,7 +242,17 @@ class CaptureAuthorizedPaymentSpec implements MutationAwareSpec<Order, OrderMuta
     return visitor.visitCaptureAuthorizedPayment(this);
   }
 }
+
+class Order extends AggregateRoot<OrderState, OrderId> {
+  apply(spec: MutationAwareSpec<Order, OrderMutationSpecVisitor>): Result<Order, DomainError> {
+    return spec.mutate(this);
+  }
+}
+
+const captured = order.apply(new CaptureAuthorizedPaymentSpec(capturedAt));
 ```
+
+When an aggregate root or entity exposes this shape, it calls `spec.mutate(this)` and receives a new aggregate/entity instance or a domain error. The spec may reuse aggregate/entity methods to preserve invariants; it must not bypass them by mutating primitive state directly.
 
 Do not use mutation-aware specs for workflows that need permissions, multiple repositories, external APIs, or branching orchestration. Those belong in application services.
 

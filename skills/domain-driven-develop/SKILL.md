@@ -109,6 +109,8 @@ right control plane before loading details.
 - Do not let one domain model silently serve multiple bounded contexts. Cross-context collaboration needs an explicit context relationship, published language, translation boundary, or documented shared-kernel choice.
 - Do not put persistence, framework, transport, tracing SDK, queue, filesystem, or provider SDK logic inside aggregates, entities, value objects, or specifications.
 - Do not let repositories answer business-policy questions. Repositories load, persist, and translate specifications; aggregates and application services make business decisions.
+- Do not add business-specific repository methods such as `findById`, `findByRequestId`, `findActiveByOwner`, or `markXDone` when a named selection or mutation spec can express the rule. Repository ports should expose stable collection-shaped operations such as `findOne(context, spec)`, `findMany(context, spec)`, `upsert(context, aggregate, spec)`, and `deleteOne(context, spec)`.
+- Treat specifications and their composition as part of the domain model, not as transport DTOs or persistence filter bags. A composed spec tree represents business logic; repository adapters translate that tree without owning its meaning.
 - Do not let query handlers mutate business state or command handlers answer rich read-model questions. Keep read and write responsibilities separate when the project uses CQRS.
 - Do not treat CQRS, command-bus classes, or domain events as proof that event sourcing or separate databases are required.
 - Do not publish event facts before the domain decision and required persistence boundary succeed. Do not let event handlers or projections own write-side business policy.
